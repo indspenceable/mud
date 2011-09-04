@@ -40,3 +40,5 @@ module Mud
     config.filter_parameters += [:password]
   end
 end
+
+require 'mud_server.rb' if Rails.env.production?
