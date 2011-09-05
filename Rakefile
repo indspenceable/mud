@@ -5,3 +5,8 @@ require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
 Mud::Application.load_tasks
+
+namespace :mud do
+  desc "Reset database, and load fixtures"
+  task :reset => ['db:drop', 'db:migrate', 'db:fixtures:load']
+end

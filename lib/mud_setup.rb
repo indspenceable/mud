@@ -1,2 +1,2 @@
-OUTPUT_BUFFER = Hash.new{ "" }
 CONNECTIONS = {}
+Log = Logger.new(STDOUT)

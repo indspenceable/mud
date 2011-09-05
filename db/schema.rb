@@ -10,14 +10,30 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110824075552) do
+ActiveRecord::Schema.define(:version => 20110905031244) do
 
-  create_table "players", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "items", :force => true do |t|
+    t.integer "owner_id",   :null => false
+    t.string  "owner_type", :null => false
+    t.string  "instance"
   end
 
-  add_index "players", ["name"], :name => "index_players_on_name", :unique => true
+  create_table "players", :force => true do |t|
+    t.string  "name",           :null => false
+    t.string  "password_hash"
+    t.string  "password_salt"
+    t.string  "pending_output"
+    t.boolean "logging_out"
+    t.integer "room_id"
+  end
+
+  add_index "players", ["name"], :name => "index_players_on_name"
+
+  create_table "rooms", :force => true do |t|
+    t.string "name", :null => false
+    t.string "desc"
+  end
+
+  add_index "rooms", ["name"], :name => "index_rooms_on_name"
 
 end
