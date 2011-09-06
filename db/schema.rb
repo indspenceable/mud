@@ -10,7 +10,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110905031244) do
+ActiveRecord::Schema.define(:version => 20110905222814) do
+
+  create_table "extrinsics", :force => true do |t|
+    t.integer  "player_id"
+    t.text     "klass"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "items", :force => true do |t|
     t.integer "owner_id",   :null => false
