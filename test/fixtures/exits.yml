@@ -1,0 +1,12 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  direction: north
+  origin_id: 1
+  destination_id: 2
+
+two:
+  direction: south 
+  origin_id: 2
+  destination_id: 1
+
