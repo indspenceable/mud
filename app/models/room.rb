@@ -1,6 +1,10 @@
 class Room < ActiveRecord::Base
   has_many :players
   has_many :items, :as => :owner
+  has_many :exits, :foreign_key => :origin_id
+  has_many :arriving_exits, :class_name => "Exit", :foreign_key => :destination_id
+
+
   alias :all_players :players
 
   def players
@@ -14,6 +18,8 @@ class Room < ActiveRecord::Base
     exits_string = nil
     [name,desc,players_string,item_string,exits_string].compact.join("\n")
   end
+
+  #ignore should be the player object
   def echo message, ignore=nil
     players.each do |p|
       p.output message unless p.id == ignore.id

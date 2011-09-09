@@ -10,6 +10,7 @@ class Unbound
     Log.debug "Attempting to login as #{data}"
     if Player.exists?(:name => data)
       @connection.send_data("logged in as #{data}.\n")
+      @connection.send_data("Shortcuts\n")
       @player = Player.find_by_name(data)
       CONNECTIONS[@player.id] = @connection
       @player.room.echo "#{@player.name} appears magically.", @player

@@ -7,7 +7,6 @@ module Commands
       @names.include? command
     end
     def execute player, arguments
-      player.room.echo "#{player.name} disapears.", player
       player.logout
     end
   end

@@ -8,3 +8,8 @@ hub:
   id: 1
   name: "The crossroads"
   desc: "You are at the crossroads."
+
+north_road:
+  id: 2
+  name: The Northroad
+  desc: This road extends out to the north.
