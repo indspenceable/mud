@@ -10,7 +10,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110905222814) do
+ActiveRecord::Schema.define(:version => 20110909053039) do
+
+  create_table "exits", :force => true do |t|
+    t.string   "direction"
+    t.integer  "origin_id"
+    t.integer  "destination_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "exits", ["origin_id"], :name => "index_exits_on_origin_id"
 
   create_table "extrinsics", :force => true do |t|
     t.integer  "player_id"
