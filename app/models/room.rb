@@ -15,7 +15,11 @@ class Room < ActiveRecord::Base
     players_here = players.reject{|p| p.id == ignore_player.id}
     players_string = players_here.empty?? nil : (players_here.map{|p| p.name}.to_sentence + ".")
     item_string = nil
-    exits_string = nil
+    exits_string = case exits.size
+                   when 0 then 'You see no exits.'
+                   when 1 then "You see an exit to the #{exits[0].direction}."
+                   else "You see exits to the #{exits.map{|e| e.direction}.to_sentance}."
+                   end
     [name,desc,players_string,item_string,exits_string].compact.join("\n")
   end
 
