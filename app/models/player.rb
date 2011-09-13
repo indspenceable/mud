@@ -26,7 +26,7 @@ class Player < ActiveRecord::Base
 
   #input/output
   def process_input command
-    Commands::parse(self, command)
+    Mud::Commands::parse(self, command)
   end
   self.chain :process_input
 

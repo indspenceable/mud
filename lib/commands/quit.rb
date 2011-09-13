@@ -1,14 +1,16 @@
-module Commands
-  class Quit
-    def initialize
-      @names = %w(quit)
-    end
-    def accept? command
-      @names.include? command
-    end
-    def execute player, arguments
-      player.logout
+module Mud
+  module Commands
+    class Quit
+      def initialize
+        @names = %w(quit)
+      end
+      def accept? command
+        @names.include? command
+      end
+      def execute player, arguments
+        player.logout
+      end
     end
   end
 end
-Commands::List << Commands::Quit.new
+Mud::Commands::List << Mud::Commands::Quit.new
