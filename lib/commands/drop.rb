@@ -1,6 +1,6 @@
 module Mud
   module Commands
-    class Get
+    class Drop
       def initialize
         @names = %w(drop)
       end
