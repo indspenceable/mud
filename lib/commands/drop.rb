@@ -24,4 +24,4 @@ module Mud
     end
   end
 end
-Mud::Commands::List << Mud::Commands::Get.new
+Mud::Commands::List << Mud::Commands::Drop.new
