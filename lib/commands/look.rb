@@ -1,7 +1,7 @@
 module Commands
   class Look
     def initialize
-      @names = ['look','l']
+      @names = %w(look l)
     end
     def accept? command
       @names.include? command

@@ -12,9 +12,9 @@ class Room < ActiveRecord::Base
   end
 
   def describe ignore_player
-    players_here = players.reject{|p| p.id == ignore_player.id}
+    players_here = ignore_player ? players.reject{|p| p.id == ignore_player.id} : players
     players_string = players_here.empty?? nil : (players_here.map{|p| p.name}.to_sentence + ".")
-    item_string = nil
+    item_string = items.empty?? nil : ( items.map{|i| i.instance.long_name }.join " ")
     exits_string = case exits.size
                    when 0 then 'You see no exits.'
                    when 1 then "You see an exit to the #{exits[0].direction}."

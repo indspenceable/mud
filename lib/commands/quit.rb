@@ -1,7 +1,7 @@
 module Commands
   class Quit
     def initialize
-      @names = ['quit']
+      @names = %w(quit)
     end
     def accept? command
       @names.include? command

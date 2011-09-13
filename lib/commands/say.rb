@@ -1,7 +1,7 @@
 module Commands
   class Say
     def initialize
-      @names = ['say']
+      @names = %w(say)
     end
     def accept? command
       @names.include? command

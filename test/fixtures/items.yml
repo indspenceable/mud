@@ -1,5 +1,8 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+<% require 'items/simple_item' %>
 
 sword: 
   owner_id: 1
-  owner_type: room
+  owner_type: Room
+  instance: <%= SimpleItem.new.to_yaml %>
+
