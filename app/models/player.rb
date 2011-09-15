@@ -3,24 +3,29 @@ class Player < ActiveRecord::Base
   belongs_to :room
   has_many :items, :as => :owner
   has_many :extrinsics
+  serialize :colors, Hash
 
   def effects
     extrinsics
   end
-  def attr_apply sym, val
-    send sym, effects.reduce(val){|memo, obj| obj.klass.send(sym,memo)}
-  end
+  #def attr_apply sym, val
+  #  send sym, effects.reduce(val){|memo, obj| obj.klass.send(sym,memo)}
+  #end
 
   def colorize category
-    @@categories ||= {
+    Player::color_code colors[category]
+  end
+
+  def self.default_colors
+    {
       :name => :red,
       :players => :blue,
       :exits => :yellow,
       :say => :cyan,
-      :end => :reset}
-    color_code @@categories[category]
+      :end => :reset
+    }
   end
-  def color_code color
+  def self.color_code color
     @@color_codes ||= {
       :red => "\e[31m",
       :blue => "\e[34m",
