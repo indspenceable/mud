@@ -28,6 +28,6 @@ end
 %w(north south east west).each do |c|
   Mud::Commands::List << Mud::Commands::StandardExit.new(c, c[0])
 end
-[%(northeast ne),%(northwest nw),%(southeast se),%(southwest sw)].each do |c|
+[%w(northeast ne),%w(northwest nw),%w(southeast se),%w(southwest sw)].each do |c|
   Mud::Commands::List << Mud::Commands::StandardExit.new(*c)
 end
