@@ -8,7 +8,7 @@ module Mud
         @names.include? command
       end
       def execute player, arguments
-        player.output(player.room.describe(player))
+        player.room.describe_to player
       end
     end
   end

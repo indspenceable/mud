@@ -12,7 +12,7 @@ module Mud
         room.items.each do |item|
           inst = item.instance
           if inst.called? arguments
-            room.echo "#{player.name} picks up #{inst.short_name}", player
+            room.echo "#{player.name} picks up #{inst.short_name}", :ignore => player
             player.output "You pick up #{inst.short_name}"
             item.owner = player
             item.save!

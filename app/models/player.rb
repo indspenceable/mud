@@ -11,23 +11,31 @@ class Player < ActiveRecord::Base
     send sym, effects.reduce(val){|memo, obj| obj.klass.send(sym,memo)}
   end
 
-  def self.color_code color
+  def colorize category
+    @@categories ||= {
+      :name => :red,
+      :players => :blue,
+      :exits => :yellow,
+      :say => :cyan,
+      :end => :reset}
+    color_code @@categories[category]
+  end
+  def color_code color
     @@color_codes ||= {
       :red => "\e[31m",
       :blue => "\e[34m",
+      :cyan => "\e[36m",
+      :yellow => "\e[33m",
       :reset =>"\e[0m"
     }
     @@color_codes[color]
-  end
-  def self.default_colors
-    @@colors ||= Hash.new(:reset).merge({:name => :red})
   end
 
   def self.chain sym
     new_name = :"direct_#{sym}"
     alias_method new_name, sym
-    define_method sym, ->(value) do 
-      self.send new_name, effects.reduce(value) { |memo, obj| obj.klass.respond_to?(sym)?  obj.klass.send(sym,memo) : memo }
+    define_method sym, ->(*value) do 
+      self.send new_name, *effects.reduce(value) { |memo, obj| obj.klass.respond_to?(sym)?  obj.klass.send(sym,*memo) : memo }
     end
   end
 
@@ -42,8 +50,12 @@ class Player < ActiveRecord::Base
   end
   self.chain :process_input
 
-  def output text
-    update_attribute(:pending_output, (pending_output ? pending_output + text : text) + "\n")
+
+  def output text, opts = {}
+    opts = {:newline => true}.merge(opts)
+    text = "#{colorize(opts[:color])}#{text}#{colorize :end}" if opts[:color]
+    text = text + "\n" if opts[:newline]
+    update_attribute(:pending_output, (pending_output ? pending_output + text : text))
     deliver_output if logged_in?
   end
   self.chain :output
@@ -58,6 +70,7 @@ class Player < ActiveRecord::Base
     CONNECTIONS[id].close_connection_after_writing
   end
   def deliver_output
+    puts "Pending data is #{pending_output}"
     CONNECTIONS[id].send_data pending_output
     Log.debug("Sent #{name}: #{pending_output.chop}")
     update_attribute :pending_output, nil
