@@ -11,6 +11,18 @@ class Player < ActiveRecord::Base
     send sym, effects.reduce(val){|memo, obj| obj.klass.send(sym,memo)}
   end
 
+  def self.color_code color
+    @@color_codes ||= {
+      :red => "\e[31m",
+      :blue => "\e[34m",
+      :reset =>"\e[0m"
+    }
+    @@color_codes[color]
+  end
+  def self.default_colors
+    @@colors ||= Hash.new(:reset).merge({:name => :red})
+  end
+
   def self.chain sym
     new_name = :"direct_#{sym}"
     alias_method new_name, sym
