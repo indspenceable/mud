@@ -1,4 +1,4 @@
-require 'command_parser'
+require 'dispatch'
 class Player < ActiveRecord::Base
   belongs_to :room
   has_many :items, :as => :owner
@@ -51,7 +51,8 @@ class Player < ActiveRecord::Base
 
   #input/output
   def process_input command
-    Mud::Commands::parse(self, command)
+    #Mud::Commands::parse(self, command)
+    Dispatch.parse self,command
   end
   self.chain :process_input
 
