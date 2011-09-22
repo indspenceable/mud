@@ -1,6 +1,8 @@
 class CreateMobiles < ActiveRecord::Migration
   def self.up
     create_table :mobiles do |t|
+      t.string :type
+      t.references :room
 
       t.timestamps
     end

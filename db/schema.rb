@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110915162245) do
+ActiveRecord::Schema.define(:version => 20110915164121) do
 
   create_table "exits", :force => true do |t|
     t.string   "direction"
@@ -24,7 +24,8 @@ ActiveRecord::Schema.define(:version => 20110915162245) do
 
   create_table "extrinsics", :force => true do |t|
     t.integer  "player_id"
-    t.text     "klass"
+    t.string   "type"
+    t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -32,17 +33,25 @@ ActiveRecord::Schema.define(:version => 20110915162245) do
   create_table "items", :force => true do |t|
     t.integer "owner_id",   :null => false
     t.string  "owner_type", :null => false
-    t.string  "instance"
+    t.string  "type",       :null => false
+    t.text    "data"
+  end
+
+  create_table "mobiles", :force => true do |t|
+    t.string   "type"
+    t.integer  "room_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "players", :force => true do |t|
-    t.string  "name",                                                                                                            :null => false
+    t.string  "name",           :null => false
     t.string  "password_hash"
     t.string  "password_salt"
     t.string  "pending_output"
     t.boolean "logging_out"
     t.integer "room_id"
-    t.text    "colors",         :default => "'---\n:name: :red\n:players: :blue\n:exits: :yellow\n:say: :cyan\n:end: :reset\n'"
+    t.text    "colors"
   end
 
   add_index "players", ["name"], :name => "index_players_on_name"
