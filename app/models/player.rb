@@ -44,11 +44,6 @@ class Player < ActiveRecord::Base
     end
   end
 
-  def take_damage n
-    puts "You took #{n} damage!"
-  end
-  self.chain :take_damage
-
   #input/output
   def process_input command
     #Mud::Commands::parse(self, command)
