@@ -12,6 +12,9 @@ class CreatePlayers < ActiveRecord::Migration
       t.boolean :logging_out
 
       t.references :room
+
+      #settings
+      t.text :colors
     end
     add_index :players, :name
   end

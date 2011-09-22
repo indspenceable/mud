@@ -2,7 +2,8 @@ class CreateExtrinsics < ActiveRecord::Migration
   def self.up
     create_table :extrinsics do |t|
       t.references :player
-      t.text :klass
+      t.string :type
+      t.text :data
 
       t.timestamps
     end

@@ -17,6 +17,7 @@ class Room < ActiveRecord::Base
     player.output name, :color => :name
     player.output desc, :color => :description
     player.output players_here.map{|p| p.name}.to_sentence + ".", :color => :players unless players_here.empty?
+    player.output mobiles.map{|m| m.long_name}.join(" "), :color => :mobiles unless mobiles.empty?
     player.output items.map{|i| i.instance.long_name }.join(" "), :color => :items unless items.empty?
     exits_string = case exits.size
                    when 0 then 'You see no exits.'

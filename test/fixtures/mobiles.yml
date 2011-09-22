@@ -1,0 +1,4 @@
+
+simple:
+  type: "Mobiles::SimpleMob"
+  room_id: 1

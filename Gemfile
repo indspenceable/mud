@@ -32,3 +32,5 @@ gem 'sqlite3'
 gem 'rspec-rails'
 
 gem 'eventmachine'
+
+gem 'factory_girl_rails'

@@ -4,5 +4,5 @@
 sword: 
   owner_id: 1
   owner_type: Room
-  instance: <%= SimpleItem.new.to_yaml %>
+  type: Item
 

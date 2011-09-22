@@ -8,6 +8,12 @@ class Dispatch
     else
       player.output("I don't quite know what you mean by that.")
     end
+  rescue Object => e
+    puts "Triggered Exception"
+    puts e
+    puts "***********"
+    puts e.backtrace
+    player.output("You've triggered an uncaught exception. That's too bad. Please don't do that again, for the immediate time being? Thanks!")
   end
 
   @@command_names = {}
@@ -64,6 +70,9 @@ class Dispatch
   command %w(say) do |player, arguments|
     player.room.echo("#{player.name} says: #{arguments}",:ignore => player,:output => {:color => :say});
     player.output("You say: #{arguments}", :color => :say)
+    player.room.mobiles.each do |m|
+      m.hear player, arguments
+    end
   end
 
   [%w(north n), %w(south s), %w(east e), %w(west w)].each do |names|
@@ -79,6 +88,21 @@ class Dispatch
       else
         player.output("You can't go in that direction.")
       end
+    end
+  end
+
+  command %w(test) do |player,arguments|
+    player.output("Testing.")
+    player.items.each do |i|
+      player.output(i.hello)
+    end
+    player.output("done")
+  end
+
+  command %w(who) do |player,arguments|
+    player.output "Players online:"
+    Player.logged_in.each do |p|
+      player.output p.name
     end
   end
 end

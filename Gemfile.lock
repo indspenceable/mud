@@ -34,6 +34,10 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     eventmachine (0.12.10)
+    factory_girl (2.1.0)
+    factory_girl_rails (1.2.0)
+      factory_girl (~> 2.1.0)
+      railties (>= 3.0.0)
     i18n (0.5.0)
     mail (2.2.19)
       activesupport (>= 2.3.6)
@@ -88,6 +92,7 @@ PLATFORMS
 
 DEPENDENCIES
   eventmachine
+  factory_girl_rails
   rails (= 3.0.9)
   rspec-rails
   sqlite3

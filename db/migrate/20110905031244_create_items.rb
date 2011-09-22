@@ -3,7 +3,8 @@ class CreateItems < ActiveRecord::Migration
     create_table :items do |t|
       t.references :owner , :null => false
       t.string :owner_type, :null => false
-      t.string :instance
+      t.string :type, :null => false
+      t.text :data
     end
   end
 
