@@ -30,10 +30,9 @@ class Dispatch
   command %w(drop) do |player,arguments|
     room = player.room
     player.items.each do |item|
-      inst = item.instance
-      if inst.called? arguments
-        room.echo "#{player.name} drops #{inst.short_name}", :ignore => player
-        player.output "You drop #{inst.short_name}"
+      if item.called? arguments
+        room.echo "#{player.name} drops #{item.short_name}", :ignore => player
+        player.output "You drop #{item.short_name}"
         item.owner = room
         item.save!
         return
@@ -43,10 +42,9 @@ class Dispatch
   command %w(get g) do |player,arguments|
     room = player.room
     room.items.each do |item|
-      inst = item.instance
-      if inst.called? arguments
-        room.echo "#{player.name} picks up #{inst.short_name}", :ignore => player
-        player.output "You pick up #{inst.short_name}"
+      if item.called? arguments
+        room.echo "#{player.name} picks up #{item.short_name}", :ignore => player
+        player.output "You pick up #{item.short_name}"
         item.owner = player
         item.save!
         return
@@ -58,13 +56,12 @@ class Dispatch
   command %w(inventory i ii inv) do |player, arguments|
     player.output "You have:"
     player.items.each do |i|
-      inst = item.instance
-      player.output inst.short_name
+      player.output item.short_name
     end
   end
 
   command %w(quit qq) do |player,arguments|
-    player.logout
+    player.log_out
   end
 
   command %w(say) do |player, arguments|
