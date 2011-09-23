@@ -91,14 +91,6 @@ class Dispatch
     end
   end
 
-  command %w(test) do |player,arguments|
-    player.output("Testing.")
-    player.items.each do |i|
-      player.output(i.hello)
-    end
-    player.output("done")
-  end
-
   command %w(who) do |player,arguments|
     player.output "Players online:"
     Player.logged_in.each do |p|
