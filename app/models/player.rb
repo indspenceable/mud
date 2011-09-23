@@ -75,7 +75,7 @@ class Player < ActiveRecord::Base
   end
   def deliver_output
     CONNECTIONS[id].send_data pending_output
-    Log.debug("Sent #{name}: #{pending_output.chop}")
+    #Log.debug("Sent #{name}: #{pending_output.chop}")
     update_attribute :pending_output, nil
   end
 end
