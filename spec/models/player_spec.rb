@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Test do
+describe Player do
   before(:each) do
     @player = FactoryGirl.build(:player)
   end
@@ -30,6 +30,7 @@ describe Test do
     @player.output("a")
     @player.output("b")
     @player.output("c")
+    @player.deliver_output
   end
 
   it "Should be able to produce output in color"
