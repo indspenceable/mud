@@ -38,8 +38,9 @@ ActiveRecord::Schema.define(:version => 20110915164121) do
   end
 
   create_table "mobiles", :force => true do |t|
-    t.string   "type"
-    t.integer  "room_id"
+    t.string   "type",                                 :null => false
+    t.integer  "room_id",                              :null => false
+    t.text     "data",       :default => "'--- {}\n'", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -50,7 +51,7 @@ ActiveRecord::Schema.define(:version => 20110915164121) do
     t.string  "password_salt"
     t.string  "pending_output"
     t.boolean "logging_out"
-    t.integer "room_id"
+    t.integer "room_id",        :null => false
     t.text    "colors"
   end
 

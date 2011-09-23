@@ -11,7 +11,7 @@ class CreatePlayers < ActiveRecord::Migration
       t.string :pending_output
       t.boolean :logging_out
 
-      t.references :room
+      t.references :room, :null => false
 
       #settings
       t.text :colors
