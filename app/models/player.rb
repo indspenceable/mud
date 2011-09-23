@@ -54,7 +54,7 @@ class Player < ActiveRecord::Base
 
   def output text, opts = {}
     opts = {:newline => true}.merge(opts)
-    text = "#{colorize(opts[:color])}#{text}#{colorize :end}" if opts[:color]
+    text = "#{colorize(opts[:color])}#{text}#{Player::color_code :reset}" if opts[:color]
     text = text + "\n" if opts[:newline]
     update_attribute(:pending_output, (pending_output ? pending_output + text : text))
     #deliver_output if logged_in?
@@ -62,16 +62,20 @@ class Player < ActiveRecord::Base
   self.chain :output
 
   #login/logout
+  def log_in con
+    CONNECTIONS[id] = con
+  end
   def logged_in?
     CONNECTIONS.key? id
   end
   def self.logged_in
     CONNECTIONS.keys.map{|pid| Player.find(pid)}
   end
-  def logout
+  def log_out
     room.echo("#{name} glows softly, and then vanishes.", self)
     output("Goodbye!")
     CONNECTIONS[id].close_connection_after_writing
+    CONNECTIONS.delete(id)
   end
   def deliver_output
     CONNECTIONS[id].send_data pending_output

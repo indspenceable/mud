@@ -2,6 +2,13 @@ FactoryGirl.define do
   factory :player do
     id {|x| x}
     name "Danny"
-    colors Hash.new
+    colors ({:test1 => :red, :test2 => :blue})
+    room
+  end
+
+  factory :room do
+    id {|x| x}
+    name "example room"
+    desc "This is an example room"
   end
 end
