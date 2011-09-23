@@ -4,5 +4,5 @@
 sword: 
   owner_id: 1
   owner_type: Room
-  type: Item
+  type: Items::BasicItem
 
