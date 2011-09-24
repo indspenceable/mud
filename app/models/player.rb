@@ -2,15 +2,8 @@ require 'dispatch'
 class Player < ActiveRecord::Base
   belongs_to :room
   has_many :items, :as => :owner
-  has_many :extrinsics
+  has_many :buffs
   serialize :colors, Hash
-
-  def effects
-    extrinsics
-  end
-  #def attr_apply sym, val
-  #  send sym, effects.reduce(val){|memo, obj| obj.klass.send(sym,memo)}
-  #end
 
   def colorize category
     Player::color_code colors[category]
@@ -40,7 +33,7 @@ class Player < ActiveRecord::Base
     new_name = :"direct_#{sym}"
     alias_method new_name, sym
     define_method sym, ->(*value) do 
-      self.send new_name, *effects.reduce(value) { |memo, obj| obj.klass.respond_to?(sym)?  obj.klass.send(sym,*memo) : memo }
+      self.send new_name, *buffs.reduce(value) { |memo, obj| obj.klass.respond_to?(sym)?  obj.klass.send(sym,*memo) : memo }
     end
   end
 

@@ -1,6 +1,6 @@
-class CreateExtrinsics < ActiveRecord::Migration
+class CreateBuffs < ActiveRecord::Migration
   def self.up
-    create_table :extrinsics do |t|
+    create_table :buffs do |t|
       t.references :player
       t.string :type
       t.text :data
@@ -10,6 +10,6 @@ class CreateExtrinsics < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :extrinsics
+    drop_table :buffs
   end
 end

@@ -12,6 +12,14 @@
 
 ActiveRecord::Schema.define(:version => 20110915164121) do
 
+  create_table "buffs", :force => true do |t|
+    t.integer  "player_id"
+    t.string   "type"
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "exits", :force => true do |t|
     t.string   "direction"
     t.integer  "origin_id"
@@ -21,14 +29,6 @@ ActiveRecord::Schema.define(:version => 20110915164121) do
   end
 
   add_index "exits", ["origin_id"], :name => "index_exits_on_origin_id"
-
-  create_table "extrinsics", :force => true do |t|
-    t.integer  "player_id"
-    t.string   "type"
-    t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "items", :force => true do |t|
     t.integer "owner_id",   :null => false
