@@ -39,7 +39,6 @@ class Player < ActiveRecord::Base
 
   #input/output
   def process_input command
-    #Mud::Commands::parse(self, command)
     Dispatch.parse self,command
   end
   self.chain :process_input
@@ -72,7 +71,6 @@ class Player < ActiveRecord::Base
   end
   def deliver_output
     CONNECTIONS[id].send_data pending_output
-    #Log.debug("Sent #{name}: #{pending_output.chop}")
     update_attribute :pending_output, nil
   end
 end

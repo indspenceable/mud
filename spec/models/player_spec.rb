@@ -2,11 +2,7 @@ require 'spec_helper'
 
 describe Player do
   before(:each) do
-    begin
-      @player = FactoryGirl.build(:player)
-    rescue Object => o
-      puts o
-    end
+    @player = FactoryGirl.create(:player)
   end
   it "should be able to produce output when logged in." do
     con = mock('connection')

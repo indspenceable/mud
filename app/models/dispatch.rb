@@ -38,6 +38,7 @@ class Dispatch
         return
       end
     end
+
   end
   command %w(get g) do |player,arguments|
     room = player.room
@@ -50,7 +51,7 @@ class Dispatch
         return
       end
     end
-    player.hear "There is nothing here by that name."
+    player.output "There is nothing here by that name."
   end
 
   command %w(inventory i ii inv) do |player, arguments|
