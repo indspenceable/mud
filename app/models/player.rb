@@ -43,7 +43,6 @@ class Player < ActiveRecord::Base
   end
   self.chain :process_input
 
-
   def output text, opts = {}
     opts = {:newline => true}.merge(opts)
     text = "#{colorize(opts[:color])}#{text}#{Player::color_code :reset}" if opts[:color]

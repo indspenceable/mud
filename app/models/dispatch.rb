@@ -55,9 +55,13 @@ class Dispatch
   end
 
   command %w(inventory i ii inv) do |player, arguments|
+    if player.items.size > 0
     player.output "You have:"
-    player.items.each do |i|
-      player.output item.short_name
+      player.items.each do |i|
+        player.output item.short_name
+      end
+    else
+      player.output "You are carrying nothing."
     end
   end
 
