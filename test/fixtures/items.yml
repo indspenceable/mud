@@ -1,5 +1,4 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-<% require 'items/simple_item' %>
 
 sword: 
   owner_id: 1

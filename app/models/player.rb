@@ -45,6 +45,7 @@ class Player < ActiveRecord::Base
 
   def output text, opts = {}
     opts = {:newline => true}.merge(opts)
+    puts "Color is #{opts[:color]}"
     text = "#{colorize(opts[:color])}#{text}#{Player::color_code :reset}" if opts[:color]
     text = text + "\n" if opts[:newline]
     update_attribute(:pending_output, (pending_output ? pending_output + text : text))

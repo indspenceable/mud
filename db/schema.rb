@@ -46,13 +46,13 @@ ActiveRecord::Schema.define(:version => 20110915164121) do
   end
 
   create_table "players", :force => true do |t|
-    t.string  "name",           :null => false
+    t.string  "name",                                                             :null => false
     t.string  "password_hash"
     t.string  "password_salt"
     t.string  "pending_output"
     t.boolean "logging_out"
-    t.integer "room_id",        :null => false
-    t.text    "colors"
+    t.integer "room_id",                                                          :null => false
+    t.text    "colors",         :default => "'---\n:title: :red\n:say: :cyan\n'", :null => false
   end
 
   add_index "players", ["name"], :name => "index_players_on_name"

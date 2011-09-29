@@ -14,7 +14,7 @@ class CreatePlayers < ActiveRecord::Migration
       t.references :room, :null => false
 
       #settings
-      t.text :colors
+      t.text :colors, :null => false, :default => {:title => :red, :say => :cyan}
     end
     add_index :players, :name
   end

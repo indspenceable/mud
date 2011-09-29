@@ -56,7 +56,7 @@ class Dispatch
 
   command %w(inventory i ii inv) do |player, arguments|
     if player.items.size > 0
-    player.output "You have:"
+      player.output "You have:"
       player.items.each do |i|
         player.output item.short_name
       end
@@ -97,6 +97,19 @@ class Dispatch
     player.output "Players online:"
     Player.logged_in.each do |p|
       player.output p.name
+    end
+  end
+
+  command %w(goto) do |player,arguments|
+    begin
+      room = Room.find(arguments.to_i)
+      player.room.echo "#{player.name} vanishes.", :ignore => player
+      player.output("Everything blurs around you and you find yourself in a new place.")
+      player.room = room
+      player.save!
+      player.room.echo "#{player.name} materializes.", :ignore => player
+    rescue
+      player.output("There's no room with that id.")
     end
   end
 end

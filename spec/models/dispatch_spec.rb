@@ -46,6 +46,7 @@ describe Dispatch do
   it "Should let the player say things"
   it "Should let the player move."
   it "Should let the player see who is online."
+
   describe "goto command" do
     it "should let the player go to any room" do
       other_room = FactoryGirl.create(:room)
@@ -56,7 +57,7 @@ describe Dispatch do
       current_room = player.room
       player.process_input("goto #{player.room.id + 1}")
       player.room.should == current_room
-      player.pending_output.should == "There is no room with that id.\e[0m\n"
+      player.pending_output.should == "There's no room with that id.\n"
     end
   end
 end
