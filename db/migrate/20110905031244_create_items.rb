@@ -4,7 +4,6 @@ class CreateItems < ActiveRecord::Migration
       t.references :owner , :null => false
       t.string :owner_type, :null => false
       t.string :type, :null => false
-      t.text :data
     end
   end
 

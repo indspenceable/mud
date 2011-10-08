@@ -16,4 +16,6 @@ FactoryGirl.define do
       type "Items::BasicItem"
     end
   end
+  
+  factory :simple_item
 end

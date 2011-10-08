@@ -3,8 +3,7 @@ class CreateMobiles < ActiveRecord::Migration
     create_table :mobiles do |t|
       t.string :type, :null => false
       t.references :room, :null => false
-      t.text :data, :null => false, :default => {}
-
+      
       t.timestamps
     end
   end

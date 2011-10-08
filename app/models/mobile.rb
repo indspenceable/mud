@@ -1,7 +1,9 @@
 class Mobile < ActiveRecord::Base
   belongs_to :room
   has_many :items, :as => :owner
-  serialize :data, Hash
+  
+  has_many :data_fields
+  validate :room, :presence => true
 
   def take_action
   end

@@ -3,7 +3,6 @@ class CreateBuffs < ActiveRecord::Migration
     create_table :buffs do |t|
       t.references :player
       t.string :type
-      t.text :data
 
       t.timestamps
     end

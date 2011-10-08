@@ -4,6 +4,11 @@ class Player < ActiveRecord::Base
   has_many :items, :as => :owner
   has_many :buffs
   serialize :colors, Hash
+  
+  validate :colors, :presence => true
+  validate :room, :presence => true
+  
+  after_create :initialize_colors
 
   def colorize category
     Player::color_code colors[category]
@@ -45,7 +50,6 @@ class Player < ActiveRecord::Base
 
   def output text, opts = {}
     opts = {:newline => true}.merge(opts)
-    puts "Color is #{opts[:color]}"
     text = "#{colorize(opts[:color])}#{text}#{Player::color_code :reset}" if opts[:color]
     text = text + "\n" if opts[:newline]
     update_attribute(:pending_output, (pending_output ? pending_output + text : text))
@@ -73,4 +77,12 @@ class Player < ActiveRecord::Base
     CONNECTIONS[id].send_data pending_output
     update_attribute :pending_output, nil
   end
+  
+  private
+  
+  def initialize_colors
+    colors = Player::default_colors
+    save!
+  end
+  
 end

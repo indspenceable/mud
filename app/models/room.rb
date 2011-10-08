@@ -1,10 +1,13 @@
 class Room < ActiveRecord::Base
   has_many :players
   has_many :mobiles
+  
+  
   has_many :items, :as => :owner
   has_many :exits, :foreign_key => :origin_id
   has_many :arriving_exits, :class_name => "Exit", :foreign_key => :destination_id
 
+  
 
   alias :all_players :players
 

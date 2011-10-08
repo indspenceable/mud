@@ -10,12 +10,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110915164121) do
+ActiveRecord::Schema.define(:version => 20111002012339) do
 
   create_table "buffs", :force => true do |t|
     t.integer  "player_id"
     t.string   "type"
-    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "data_fields", :force => true do |t|
+    t.string   "key"
+    t.string   "value"
+    t.integer  "owner_id"
+    t.string   "owner_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -34,25 +42,23 @@ ActiveRecord::Schema.define(:version => 20110915164121) do
     t.integer "owner_id",   :null => false
     t.string  "owner_type", :null => false
     t.string  "type",       :null => false
-    t.text    "data"
   end
 
   create_table "mobiles", :force => true do |t|
-    t.string   "type",                                 :null => false
-    t.integer  "room_id",                              :null => false
-    t.text     "data",       :default => "'--- {}\n'", :null => false
+    t.string   "type",       :null => false
+    t.integer  "room_id",    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "players", :force => true do |t|
-    t.string  "name",                                                             :null => false
+    t.string  "name",           :null => false
     t.string  "password_hash"
     t.string  "password_salt"
     t.string  "pending_output"
     t.boolean "logging_out"
-    t.integer "room_id",                                                          :null => false
-    t.text    "colors",         :default => "'---\n:title: :red\n:say: :cyan\n'", :null => false
+    t.integer "room_id",        :null => false
+    t.text    "colors"
   end
 
   add_index "players", ["name"], :name => "index_players_on_name"

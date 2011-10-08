@@ -2,13 +2,15 @@ class Mobiles::Rat < Mobile
   after_save :init_data
 
   def take_action
-    if self.data[:action_timeout] <= 0
-      room.echo "#{short_name} growls menacingly".capitalize
-      self.data[:action_timeout] = rand(5) + 10
+    timeout = data_fields.find_by_key('timeout')
+    val = timeout.value
+    if val > 0
+      timeout.value = val-1
     else
-      self.data[:action_timeout] -= 1
+      room.echo "A filthy rat scurries about and growls at you."
+      timeout.value = "10"
     end
-    save!
+    timeout.save!
   end
 
   def short_name
@@ -20,7 +22,6 @@ class Mobiles::Rat < Mobile
 
   private
   def init_data
-    10.times {puts "HELLO WORLD."}
-    self.data = {:action_timeout => 10}
+    data_fields.create(:key => 'timeout', :value => 10.to_s)
   end
 end

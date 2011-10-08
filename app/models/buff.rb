@@ -1,4 +1,5 @@
 class Buff < ActiveRecord::Base
-  serialize :data
   belongs_to :player
+  
+  has_many :data_fields
 end
