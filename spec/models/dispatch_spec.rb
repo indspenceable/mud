@@ -43,7 +43,8 @@ describe Dispatch do
     player.process_input("quit")
   end
 
-  it "Should let the player say things"
+  it "Should let the player say things" do
+  end
   it "Should let the player move."
   it "Should let the player see who is online."
 
