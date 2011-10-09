@@ -29,6 +29,9 @@ gem 'sqlite3'
 # group :development, :test do
 #   gem 'webrat'
 # end
-gem 'rspec-rails'
+
 gem 'eventmachine'
-gem 'factory_girl_rails'
+group :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+end
