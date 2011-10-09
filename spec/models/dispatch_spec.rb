@@ -102,7 +102,6 @@ describe Dispatch do
         exit = FactoryGirl.create(:exit, :direction => 'north', :origin => player.room, :destination => other_room)
         player.room.exits.size.should == 1
         player.process_input("remove_exit north")
-#        player.room.exits.reload
         player.room.exits.size.should == 0
       end
       it "should allow you to create an exit." do
