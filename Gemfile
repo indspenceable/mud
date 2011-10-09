@@ -30,7 +30,5 @@ gem 'sqlite3'
 #   gem 'webrat'
 # end
 gem 'rspec-rails'
-
 gem 'eventmachine'
-
 gem 'factory_girl_rails'

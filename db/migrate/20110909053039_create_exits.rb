@@ -7,7 +7,7 @@ class CreateExits < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :exits, :origin_id
+    add_index :exits, [:origin_id, :direction], :unique => true
   end
 
   def self.down

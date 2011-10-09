@@ -10,6 +10,9 @@ FactoryGirl.define do
     desc "This is an example room"
   end
   
+  factory :exit do
+  end
+  
   factory :item do
     owner :factory => :room
     factory :basic_item, :class => Items::BasicItem do

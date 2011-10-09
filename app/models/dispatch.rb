@@ -112,4 +112,45 @@ class Dispatch
       player.output("There's no room with that id.")
     end
   end
+  
+  command %w(rooms) do |player, arguments|
+    player.output("Rooms:\n" + Room.all.map{|r| "#{r.id}: #{r.name}"}.join("\n"))
+  end
+  
+  command %w(bl buildlook buildl blook) do |player, arguments|
+    player.output("You are in room ##{player.room.id}")
+  end
+  
+  command %w(set_title) do |player,arguments|
+    player.room.name = arguments
+    player.room.save!
+  end
+  
+  command %w(set_desc) do |player,arguments|
+    player.room.desc = arguments
+    player.room.save!
+  end
+  
+  command %w(create_room) do |player, arguments|
+    Room.create(:name => arguments)
+    player.output("You created a new room.")
+  end
+  
+  command %w(create_exit) do |player, arguments|
+    dir,target = arguments.split
+    player.output "Please use a valid direction" or break unless %w(north south east west).include? dir
+    r = Room.find(target) rescue nil
+    player.output "There's no room with that id" or break unless r
+    Exit.create(:direction => dir, :origin => player.room, :destination => r)
+    player.output ("You created an exit to the #{dir}")
+  end
+  
+  command %w(remove_exit) do |player, arguments|
+    begin
+      player.room.exits.where(:direction => arguments).first.destroy
+      player.output "You destroyed that exit"
+    rescue
+      player.output "There is no exit in that direction."
+    end
+  end
 end
