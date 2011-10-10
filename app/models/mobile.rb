@@ -1,8 +1,6 @@
 class Mobile < ActiveRecord::Base
   belongs_to :room
   has_many :items, :as => :owner
-  
-  has_many :data_fields
   validate :room, :presence => true
 
   def take_action

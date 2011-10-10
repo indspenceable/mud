@@ -10,20 +10,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111002012339) do
+ActiveRecord::Schema.define(:version => 20111009233342) do
 
   create_table "buffs", :force => true do |t|
     t.integer  "player_id"
     t.string   "type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "data_fields", :force => true do |t|
-    t.string   "key"
-    t.string   "value"
-    t.integer  "owner_id"
-    t.string   "owner_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -36,7 +27,7 @@ ActiveRecord::Schema.define(:version => 20111002012339) do
     t.datetime "updated_at"
   end
 
-  add_index "exits", ["origin_id"], :name => "index_exits_on_origin_id"
+  add_index "exits", ["origin_id", "direction"], :name => "index_exits_on_origin_id_and_direction", :unique => true
 
   create_table "items", :force => true do |t|
     t.integer "owner_id",   :null => false
@@ -62,6 +53,13 @@ ActiveRecord::Schema.define(:version => 20111002012339) do
   end
 
   add_index "players", ["name"], :name => "index_players_on_name"
+
+  create_table "rat_details", :force => true do |t|
+    t.integer  "rat_id"
+    t.integer  "toughness",  :default => 15, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "rooms", :force => true do |t|
     t.string "name", :null => false
