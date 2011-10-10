@@ -5,10 +5,8 @@ class Mobile < ActiveRecord::Base
 
   def take_action
   end
-
   def hear speaker, words
   end
-
   def short_name
     raise "short_name undefined for #{self.class}"
   end
