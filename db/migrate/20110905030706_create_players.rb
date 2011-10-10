@@ -14,7 +14,7 @@ class CreatePlayers < ActiveRecord::Migration
       t.references :room, :null => false
 
       #settings
-      t.text :colors#, :null => false, :default => {:title => :red, :say => :cyan}.to_yaml
+      t.text :colors, :null => false#, :default => {:title => :red, :say => :cyan}.to_yaml
     end
     add_index :players, :name
   end

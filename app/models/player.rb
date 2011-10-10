@@ -8,7 +8,12 @@ class Player < ActiveRecord::Base
   validate :colors, :presence => true
   validate :room, :presence => true
   
-  after_create :initialize_colors
+  before_create do
+    self.colors ||= Player::default_colors
+  end
+  before_save do
+    name.downcase!
+  end
 
   def colorize category
     Player::color_code colors[category]
@@ -77,12 +82,4 @@ class Player < ActiveRecord::Base
     CONNECTIONS[id].send_data pending_output
     update_attribute :pending_output, nil
   end
-  
-  private
-  
-  def initialize_colors
-    colors = Player::default_colors
-    save!
-  end
-  
 end
