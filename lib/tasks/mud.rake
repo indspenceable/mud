@@ -1,4 +1,4 @@
 namespace :mud do
-  desc "Reset database, and load fixtures"
-  task :reset => ['db:drop', 'db:migrate', 'db:fixtures:load']
+  desc "Reset database. Don't load fixtures"
+  task :reset => ['db:drop', 'db:migrate', 'db:seed']
 end
