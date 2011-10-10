@@ -14,7 +14,7 @@ ActiveRecord::Schema.define(:version => 20111009233342) do
 
   create_table "buffs", :force => true do |t|
     t.integer  "player_id"
-    t.string   "type"
+    t.string   "type",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -42,6 +42,8 @@ ActiveRecord::Schema.define(:version => 20111009233342) do
     t.datetime "updated_at"
   end
 
+  add_index "mobiles", ["type"], :name => "index_mobiles_on_type"
+
   create_table "players", :force => true do |t|
     t.string  "name",           :null => false
     t.string  "password_hash"
@@ -49,7 +51,7 @@ ActiveRecord::Schema.define(:version => 20111009233342) do
     t.string  "pending_output"
     t.boolean "logging_out"
     t.integer "room_id",        :null => false
-    t.text    "colors"
+    t.text    "colors",         :null => false
   end
 
   add_index "players", ["name"], :name => "index_players_on_name"
@@ -60,6 +62,8 @@ ActiveRecord::Schema.define(:version => 20111009233342) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "rat_details", ["rat_id"], :name => "index_rat_details_on_rat_id", :unique => true
 
   create_table "rooms", :force => true do |t|
     t.string "name", :null => false
