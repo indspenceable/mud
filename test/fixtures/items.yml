@@ -1,7 +1,0 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-sword: 
-  owner_id: 1
-  owner_type: Room
-  type: Items::BasicItem
-
