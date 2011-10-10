@@ -5,7 +5,7 @@ require 'player_connection'
 
 class ActiveRecord::Base
   #facilitate using class details
-   def self.own_one(class_name)
+   def self.owns_one(class_name)
      assoc = "owned_#{class_name.underscore}"
      has_one assoc, :class_name => class_name, :autosave => true
      reflect_on_association(assoc).klass.column_names.reject do |column_name|

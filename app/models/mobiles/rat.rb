@@ -1,5 +1,5 @@
 class Mobiles::Rat < Mobile
-  own_one "RatDetail"
+  owns_one "RatDetail"
   
   def take_action
   end
