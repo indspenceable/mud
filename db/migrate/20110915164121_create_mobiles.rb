@@ -6,6 +6,7 @@ class CreateMobiles < ActiveRecord::Migration
       
       t.timestamps
     end
+    add_index :mobiles, :type
   end
 
   def self.down

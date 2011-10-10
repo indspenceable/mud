@@ -5,6 +5,7 @@ class CreateRatDetails < ActiveRecord::Migration
       t.integer :toughness, :null => false, :default => 15
       t.timestamps
     end
+    add_index :rat_details, :rat_id, :unique => true
   end
 
   def self.down
