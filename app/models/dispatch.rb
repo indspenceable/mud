@@ -9,6 +9,8 @@ class Dispatch
       player.output("I don't quite know what you mean by that.")
     end
   rescue Object => e
+    raise e unless Rails.env.production?
+      
     puts "Triggered Exception"
     puts e
     puts "***********"
