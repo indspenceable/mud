@@ -20,7 +20,6 @@ class ActiveRecord::Base
        end
      end
      after_create do
-       puts "ActiveRecord::Base, in 'own_one'"
        self.send(:"create_#{assoc}")
        save!
      end
