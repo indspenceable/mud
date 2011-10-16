@@ -1,4 +1,4 @@
-class C::Builder::CreateRoom < Command
+class Commands::Builder::CreateRoom < Command
   def perform player,arguments
     Room.create(:name => arguments)
     player.output("You created a new room.")

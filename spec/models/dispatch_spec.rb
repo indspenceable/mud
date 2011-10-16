@@ -93,7 +93,7 @@ describe Dispatch do
     it "should allow a user to change the description of a room with set desc" do
       new_desc = "A very interesting description."
       new_title = "not the old title"
-      player.process_input("set_desc #{new_desc}")
+      player.process_input("set_description #{new_desc}")
       player.room.desc.should == new_desc
     end
     context "Modify exits" do

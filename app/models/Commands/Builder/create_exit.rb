@@ -1,4 +1,4 @@
-class C::Builder::CreateExit < Command
+class Commands::Builder::CreateExit < Command
   def perform player,arguments
     dir,target = arguments.split
     player.output "Please use a valid direction" or return unless %w(north south east west).include? dir

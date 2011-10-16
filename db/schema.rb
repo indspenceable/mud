@@ -38,9 +38,9 @@ ActiveRecord::Schema.define(:version => 20111015044539) do
     t.datetime "updated_at"
   end
 
-  add_index "command_names", ["command_group_id"], :name => "index_on_command_group"
-  add_index "command_names", ["command_id"], :name => "index_on_command"
-  add_index "command_names", ["name"], :name => "index_on_name", :unique => true
+  add_index "command_names", ["command_group_id", "name"], :name => "index_on_command_groups_names", :unique => true
+  add_index "command_names", ["command_id"], :name => "index_on_commands"
+  add_index "command_names", ["name"], :name => "index_on_names"
 
   create_table "commands", :force => true do |t|
     t.string   "type"

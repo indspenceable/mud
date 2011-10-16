@@ -7,9 +7,9 @@ class CreateCommandNames < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :command_names, :name, :name => :index_on_names, :unique => true
+    add_index :command_names, :name, :name => :index_on_names
     add_index :command_names, :command_id, :name => :index_on_commands
-    add_index :command_names, [:command_group_id, :name], :name => :index_on_command_groups_names
+    add_index :command_names, [:command_group_id, :name], :name => :index_on_command_groups_names, :unique => true
   end
 
   def self.down

@@ -1,4 +1,4 @@
-class C::Get < Command
+class Commands::Get < Command
   def perform player, arguments
     room = player.room
     room.items.each do |item|

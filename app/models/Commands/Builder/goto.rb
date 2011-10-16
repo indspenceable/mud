@@ -1,5 +1,5 @@
-class C::Builder::Goto < Command
-  def perform
+class Commands::Builder::Goto < Command
+  def perform player,arguments
     room = Room.find(arguments.to_i) rescue nil
     if room
       player.room.echo "#{player.name} vanishes.", :ignore => player

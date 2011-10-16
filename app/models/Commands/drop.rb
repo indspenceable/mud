@@ -1,5 +1,5 @@
-class C::Drop < Command
-  def perform
+class Commands::Drop < Command
+  def perform player, arguments
     room = player.room
     player.items.each do |item|
       if item.called? arguments

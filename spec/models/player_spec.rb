@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Player do
   let(:player) do
-    FactoryGirl.create(:player)
+    p = FactoryGirl.create(:player)
   end
   it "should be able to produce output when logged in." do
     con = mock('connection')

@@ -1,4 +1,4 @@
-class C::Inventory < Command
+class Commands::Inventory < Command
   def perform player, arguments
     if player.items.size > 0
       player.output "You have:"

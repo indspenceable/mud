@@ -1,4 +1,4 @@
-class C::Builder::RemoveExit < Command
+class Commands::Builder::RemoveExit < Command
   def perform player,arguments
     begin
       player.room.exits.where(:direction => arguments).first.destroy

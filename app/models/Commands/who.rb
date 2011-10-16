@@ -1,4 +1,4 @@
-class C::Who < Command
+class Commands::Who < Command
   def perform player, arguments
     player.output "Players online:"
     Player.logged_in.each do |p|

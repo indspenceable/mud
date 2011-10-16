@@ -1,4 +1,4 @@
-class C::Look < Command
+class Commands::Look < Command
   def perform player, args
     player.room.describe_to player
   end
