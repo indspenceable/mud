@@ -1,6 +1,7 @@
 #! ruby
 
 require File.expand_path('../config/environment',  __FILE__)
+ActiveRecord::Base.logger = Log unless Rails.env.production?
 
 puts "About to start eventmachine."
 EM::run do

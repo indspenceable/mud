@@ -24,7 +24,7 @@ class Dispatch
     @@command_names.merge! Hash[names.map{|n| [n,command_method]}]
     define_singleton_method command_method, &blk
   end
-
+=begin
   command %w(look l) do |player,args|
     player.room.describe_to player
   end
@@ -40,8 +40,8 @@ class Dispatch
         return
       end
     end
-
   end
+
   command %w(get g) do |player,arguments|
     room = player.room
     room.items.each do |item|
@@ -70,7 +70,7 @@ class Dispatch
   command %w(quit qq) do |player,arguments|
     player.log_out
   end
-
+  
   command %w(say) do |player, arguments|
     player.room.echo("#{player.name} says: #{arguments}",:ignore => player,:output => {:color => :say});
     player.output("You say: #{arguments}", :color => :say)
@@ -155,4 +155,5 @@ class Dispatch
       player.output "There is no exit in that direction."
     end
   end
+=end
 end

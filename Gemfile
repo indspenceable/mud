@@ -33,4 +33,5 @@ gem 'sqlite3'
 gem 'eventmachine'
 gem 'rspec-rails'
 gem 'factory_girl_rails'
+gem 'pry'
 

@@ -10,11 +10,40 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111009233342) do
+ActiveRecord::Schema.define(:version => 20111015044539) do
 
   create_table "buffs", :force => true do |t|
     t.integer  "player_id"
     t.string   "type",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "command_groups", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "command_groups_players", :id => false, :force => true do |t|
+    t.integer "player_id"
+    t.integer "command_group_id"
+  end
+
+  create_table "command_names", :force => true do |t|
+    t.integer  "command_id"
+    t.integer  "command_group_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "command_names", ["command_group_id"], :name => "index_on_command_group"
+  add_index "command_names", ["command_id"], :name => "index_on_command"
+  add_index "command_names", ["name"], :name => "index_on_name", :unique => true
+
+  create_table "commands", :force => true do |t|
+    t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

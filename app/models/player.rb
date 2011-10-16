@@ -8,8 +8,17 @@ class Player < ActiveRecord::Base
   validate :colors, :presence => true
   validate :room, :presence => true
   
+  has_and_belongs_to_many :command_groups
+
+  def command_names
+    CommandName.where(:command_group_id => command_groups)
+  end
+  
   before_create do
     self.colors ||= Player::default_colors
+  end
+  after_create do
+    command_groups << CommandGroup.find_by_name('default')
   end
   before_save do
     name.downcase!
@@ -28,14 +37,14 @@ class Player < ActiveRecord::Base
       :end => :reset
     }
   end
+  @@color_codes ={
+    :red => "\e[31m",
+    :blue => "\e[34m",
+    :cyan => "\e[36m",
+    :yellow => "\e[33m",
+    :reset =>"\e[0m"
+  }
   def self.color_code color
-    @@color_codes ||= {
-      :red => "\e[31m",
-      :blue => "\e[34m",
-      :cyan => "\e[36m",
-      :yellow => "\e[33m",
-      :reset =>"\e[0m"
-    }
     @@color_codes[color]
   end
 
@@ -48,8 +57,26 @@ class Player < ActiveRecord::Base
   end
 
   #input/output
-  def process_input command
-    Dispatch.parse self,command
+  def process_input input
+    input = "say #{input[1,input.length]}" if input[0]=='"' || input[0]=="'"
+    input=~(/\A(\w*)\s*(.*)?\z/)
+    command_name,arguments = $1,$2
+
+    # is there a command with that name that I have access to?
+    command = command_names.find_by_name($1).command rescue nil
+    if command
+      command.perform self, $2
+    else
+      output("I don't quite know what you mean by that.")
+    end
+  rescue Object => e
+    raise e unless Rails.env.production?
+      
+    puts "Triggered Exception"
+    puts e
+    puts "***********"
+    puts e.backtrace
+    output("You've triggered an uncaught exception. That's too bad. Please don't do that again, for the immediate time being? Thanks!")
   end
   self.chain :process_input
 
