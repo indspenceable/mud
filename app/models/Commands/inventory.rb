@@ -1,4 +1,7 @@
 class Commands::Inventory < Command
+  def self.names
+    %w(inventory inv ii i)
+  end
   def perform player, arguments
     if player.items.size > 0
       player.output "You have:"

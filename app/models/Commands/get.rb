@@ -1,4 +1,7 @@
 class Commands::Get < Command
+  def self.names
+    %w(g get)
+  end
   def perform player, arguments
     room = player.room
     room.items.each do |item|

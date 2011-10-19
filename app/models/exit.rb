@@ -11,4 +11,7 @@ class Exit < ActiveRecord::Base
   def self.reverse direction
     @@reverse_exits[direction] || 'ether'
   end
+  def reverse
+    self.class.reverse direction
+  end
 end

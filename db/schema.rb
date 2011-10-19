@@ -20,10 +20,13 @@ ActiveRecord::Schema.define(:version => 20111015044539) do
   end
 
   create_table "command_groups", :force => true do |t|
-    t.string   "name"
+    t.string   "name",       :null => false
+    t.string   "prefix"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "command_groups", ["prefix"], :name => "index_command_groups_on_prefix", :unique => true
 
   create_table "command_groups_players", :id => false, :force => true do |t|
     t.integer "player_id"
@@ -31,9 +34,9 @@ ActiveRecord::Schema.define(:version => 20111015044539) do
   end
 
   create_table "command_names", :force => true do |t|
-    t.integer  "command_id"
-    t.integer  "command_group_id"
-    t.string   "name"
+    t.integer  "command_id",       :null => false
+    t.integer  "command_group_id", :null => false
+    t.string   "name",             :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

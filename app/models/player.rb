@@ -59,16 +59,23 @@ class Player < ActiveRecord::Base
   #input/output
   def process_input input
     input = "say #{input[1,input.length]}" if input[0]=='"' || input[0]=="'"
-    input=~(/\A(\w*)\s*(.*)?\z/)
-    command_name,arguments = $1,$2
+    
+    command_name,arguments = input.split(' ', 2)
+    # if there's an exit with this name...
+    command_name, arguments = "exit", input if room.exits.find_by_direction(command_name)
 
-    # is there a command with that name that I have access to?
-    command = command_names.find_by_name($1).command rescue nil
-    if command
-      command.perform self, $2
-    else
-      output("I don't quite know what you mean by that.")
-    end
+
+    #Global namespace'd command
+    command = command_names.find_by_name(command_name).command rescue nil
+    return command.perform self, arguments if command
+    #nested namespace command
+    group_name, command_name, arguments = command_name, 'goto', 1
+    command = command_groups.find_by_prefix(group_name).commands.find_by_name(command_name) rescue nil
+    return command.perform self, arguments if command
+ 
+    
+    
+    output "I don't quite know what you mean by that."
   rescue Object => e
     raise e unless Rails.env.production?
       

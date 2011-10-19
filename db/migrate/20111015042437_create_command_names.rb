@@ -1,9 +1,9 @@
 class CreateCommandNames < ActiveRecord::Migration
   def self.up
     create_table :command_names do |t|
-      t.references :command
-      t.references :command_group
-      t.string :name
+      t.references :command, :null => false
+      t.references :command_group, :null => false
+      t.string :name, :null => false
 
       t.timestamps
     end
