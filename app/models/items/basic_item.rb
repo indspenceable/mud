@@ -1,4 +1,6 @@
 class Items::BasicItem < Item
+  item_type :basic
+  
   def short_name
     'item'
   end
@@ -8,4 +10,6 @@ class Items::BasicItem < Item
   def called? name
     name == 'item'
   end
+  
+  
 end

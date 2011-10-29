@@ -9,12 +9,18 @@ class CreatePlayers < ActiveRecord::Migration
 
       #output
       t.string :pending_output
-      t.boolean :logging_out
+      t.boolean :logged_in
 
       t.references :room, :null => false
 
       #settings
       t.text :colors, :null => false#, :default => {:title => :red, :say => :cyan}.to_yaml
+      
+      #Level up crap
+      t.integer :exp, :null => false, :default => 0
+      t.integer :hp
+      t.integer :mp
+      
     end
     add_index :players, :name
   end

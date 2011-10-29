@@ -1,4 +1,3 @@
-require 'player'
 require 'unbound_connection'
 
 module Mud
@@ -8,7 +7,11 @@ module Mud
     end
 
     def unbind
-      CONNECTIONS.delete(@player) if @player
+      if @player
+        p = Player.find(@player)
+        p.log_out! if p.logged_in #examine the ATTRIBUTE not the method.
+        p.remove_connection!
+      end
     end
 
     def receive_data data

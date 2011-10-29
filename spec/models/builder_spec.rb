@@ -39,6 +39,11 @@ describe "Building commands" do
       Room.all.size.should == current_number_of_rooms+1
       Room.find_by_name("a brand new room").should_not be_nil
     end
+    it "should warn a player trying to build a room without a title." do
+      current_number_of_rooms = Room.all.size
+      player.process_input("create_room")
+      Room.all.size.should == current_number_of_rooms
+    end
   end
   context "room editing commands" do
     it "should allow a user to change the title of a room with set title" do

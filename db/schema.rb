@@ -10,7 +10,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111015044539) do
+ActiveRecord::Schema.define(:version => 20111028054708) do
+
+  create_table "balance_uses", :force => true do |t|
+    t.string   "balance_type", :null => false
+    t.datetime "ending_at",    :null => false
+    t.integer  "player_id",    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "balance_uses", ["player_id", "balance_type"], :name => "index_on_player_id_balance_types", :unique => true
 
   create_table "buffs", :force => true do |t|
     t.integer  "player_id"
@@ -77,13 +87,16 @@ ActiveRecord::Schema.define(:version => 20111015044539) do
   add_index "mobiles", ["type"], :name => "index_mobiles_on_type"
 
   create_table "players", :force => true do |t|
-    t.string  "name",           :null => false
+    t.string  "name",                          :null => false
     t.string  "password_hash"
     t.string  "password_salt"
     t.string  "pending_output"
-    t.boolean "logging_out"
-    t.integer "room_id",        :null => false
-    t.text    "colors",         :null => false
+    t.boolean "logged_in"
+    t.integer "room_id",                       :null => false
+    t.text    "colors",                        :null => false
+    t.integer "exp",            :default => 0, :null => false
+    t.integer "hp"
+    t.integer "mp"
   end
 
   add_index "players", ["name"], :name => "index_players_on_name"

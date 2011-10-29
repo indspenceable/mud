@@ -31,7 +31,12 @@ gem 'sqlite3'
 # end
 
 gem 'eventmachine'
-gem 'rspec-rails'
-gem 'factory_girl_rails'
-gem 'pry'
 
+#group :development do
+  gem 'pry'
+# end
+# 
+# group :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+#end

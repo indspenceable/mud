@@ -1,4 +1,5 @@
 class Commands::Drop < Command
+  check_standard
   def perform player, arguments
     room = player.room
     player.items.each do |item|

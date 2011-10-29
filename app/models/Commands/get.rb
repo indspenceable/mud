@@ -1,4 +1,5 @@
 class Commands::Get < Command
+  check_standard
   def self.names
     %w(g get)
   end

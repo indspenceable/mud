@@ -3,6 +3,6 @@ class Commands::Quit < Command
     %w(quit qq)
   end
   def perform player,arguments
-    player.log_out
+    player.log_out!
   end
 end

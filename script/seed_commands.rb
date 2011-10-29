@@ -24,21 +24,20 @@ end
   end
 end
 =end
-
 # Only support 1 level of nesting.
 default = CommandGroup.find_by_name('default')
 Dir.glob("./app/models/commands/*").each do |path|
-  puts "Found #{path}"
+  #puts "Found #{path}"
   if path =~ /.*\/(.*)\.rb/
     Commands.const_get($1.camelcase).find_or_create_by_type.tap do |cmd|
       Commands.const_get($1.camelcase).names.each do |n|
-        puts "Creating command of type :#{Commands.const_get($1.camelcase)} and naming #{n}"
+        #puts "Creating command of type :#{Commands.const_get($1.camelcase)} and naming #{n}"
         cmd.command_names.find_or_create_by_command_group_id_and_name(default.id, n.underscore)
       end
     end
   else
     name_space = path.match(/\/([^\/]*)\z/)[1]
-    puts "namespace is #{name_space}"
+    #puts "namespace is #{name_space}"
     
     current_group = CommandGroup.find_or_create_by_name(name_space.underscore)
     
@@ -49,7 +48,7 @@ Dir.glob("./app/models/commands/*").each do |path|
         #else
           Commands.const_get(name_space.camelcase).const_get($1.camelcase).find_or_create_by_type.tap do |cmd|
              Commands.const_get(name_space.camelcase).const_get($1.camelcase).names.each do |n|
-              puts "Creating command of type :#{ Commands.const_get(name_space.camelcase).const_get($1.camelcase)} and naming #{n}"
+              #puts "Creating command of type :#{ Commands.const_get(name_space.camelcase).const_get($1.camelcase)} and naming #{n}"
               cmd.command_names.find_or_create_by_command_group_id_and_name(current_group.id, n.underscore)
             end
           end
