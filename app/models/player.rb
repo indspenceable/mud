@@ -66,18 +66,21 @@ class Player < ActiveRecord::Base
 
   #TODO does this live here?
   module Exits
-    def exit_names
+    def self.valid_standard_exits? dir
+      exit_names[dir] or (dir if exit_names.values.include? dir)
+    end
+    def self.exit_names
       @@exit_names ||= {'n'=>'north','s'=>'south','e'=>'east','w'=>'west','nw'=>'northwest','sw'=>'southwest','se'=>'southeast','ne'=>'northeast'}
     end
     def parse_direction cmd, args
       # If command is a standard exit name set exit_dir to that
-      exit_dir = exit_names.values.include?(cmd)? cmd : exit_names[cmd]
+      exit_dir = Player::Exits.exit_names.values.include?(cmd)? cmd : Player::Exits.exit_names[cmd]
       # find the exit for that direction, if it exists
       exit_obj = room.exits.find_by_direction (exit_dir || cmd)
       # if it is either a standard exit name, OR we found an exit for a special name
       if exit_dir || exit_obj
         res = command_names.find_by_name('exit').command.perform_with_balance_check self, (exit_dir || cmd) rescue nil
-        output "There's no exit in that direction" unless res
+        #output "There's no exit in that direction" unless res
         true
       end
     end
@@ -121,6 +124,7 @@ class Player < ActiveRecord::Base
       text = text + "\n" if opts[:newline]
       update_attribute(:pending_output, (pending_output ? pending_output + text : text))
       #deliver_output if logged_in?
+      nil
     end
     
     
@@ -168,7 +172,7 @@ class Player < ActiveRecord::Base
       !off_balance?(balance_type)
     end
 
-    def take_balance! balance_type, time_in_seconds
+    def use_balance! balance_type, time_in_seconds
       BalanceUse.find_or_create_by_player_id_and_balance_type(:player_id => self.id, :balance_type => balance_type, :ending_at => Time.now) do |bu|
         bu.ending_at += time_in_seconds.seconds
       end
@@ -189,13 +193,25 @@ class Player < ActiveRecord::Base
     def level
       (Math.sqrt(exp)/3).floor() + 1
     end
-    def max_hp
-      60*level
-    end
     def max_mp
       60*level
     end
   end
   include Experience
   
+  module Health
+    def max_hp
+      60*level
+    end
+    def take_damage! damage
+      update_attribute(:hp, hp - damage)
+      die! if self.hp <= 0
+    end
+    def die!
+      output "You have died."
+      room.echo "#{name} has died. What a loser!", self
+      update_attribute(:hp, max_hp)
+    end
+  end
+  include Health
 end

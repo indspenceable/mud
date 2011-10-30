@@ -28,4 +28,10 @@ class Command < ActiveRecord::Base
   def self.names
     [self.name.match(/.*::(.*)\z/)[1]]
   end
+  
+  def parse_commands args, *expected_types
+    args.split.tap do |arg_list|
+      expected_ty
+    end
+  end
 end

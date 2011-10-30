@@ -22,7 +22,7 @@ class Room < ActiveRecord::Base
     exits_string = case exits.size
                    when 0 then 'You see no exits.'
                    when 1 then "You see an exit to the #{exits[0].direction}."
-                   else "You see exits to the #{exits.map{|e| e.direction}.to_sentance}."
+                   else "You see exits to the #{exits.map{|e| e.direction}.to_sentence}."
                    end
     player.output exits_string, :color => :exits
   end

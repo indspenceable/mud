@@ -9,10 +9,13 @@ describe Dispatch do
     player # don't lazy load the player!
   end
 
-  it "Should have a command to look." do
-    room = player.room
-    player.process_input("look")
-    player.pending_output.should == "#{room.name}\e[0m\n#{room.desc}\e[0m\nYou see no exits.\e[0m\n"
+  describe "Look Command"
+    it "Should have a command to look." do
+      room = player.room
+      player.process_input("look")
+      player.pending_output.should == "#{room.name}\e[0m\n#{room.desc}\e[0m\nYou see no exits.\e[0m\n"
+    end
+    it "Shouldn't crash if there are multiple exits"
   end
 
   it "Should have a command to get items." do
