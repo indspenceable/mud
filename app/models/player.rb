@@ -66,7 +66,7 @@ class Player < ActiveRecord::Base
 
   #TODO does this live here?
   module Exits
-    def self.valid_standard_exits? dir
+    def self.valid_standard_exit? dir
       exit_names[dir] or (dir if exit_names.values.include? dir)
     end
     def self.exit_names
