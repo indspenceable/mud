@@ -1,5 +1,6 @@
 class Commands::Exit < Command
   check_standard
+  
   def perform player, exit_direction
     my_exit = player.room.exits.find_by_direction(exit_direction) rescue nil
     if my_exit

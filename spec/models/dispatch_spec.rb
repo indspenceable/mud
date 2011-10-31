@@ -9,11 +9,11 @@ describe Dispatch do
     player # don't lazy load the player!
   end
 
-  describe "Look Command"
+  describe "Look Command" do
     it "Should have a command to look." do
       room = player.room
       player.process_input("look")
-      player.pending_output.should == "#{room.name}\e[0m\n#{room.desc}\e[0m\nYou see no exits.\e[0m\n"
+      player.should have_output "#{room.name}\n#{room.desc}\nYou see no exits.\n"
     end
     it "Shouldn't crash if there are multiple exits"
   end
@@ -50,7 +50,6 @@ describe Dispatch do
     player.process_input("quit")
   end
 
-  # Pending
   it "Should let the player say things"
   context "Movement" do
     let(:other_room) do

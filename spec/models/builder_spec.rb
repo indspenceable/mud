@@ -19,14 +19,13 @@ describe "Building commands" do
       current_room = player.room
       player.process_input("goto #{player.room.id + 1}")
       player.room.should == current_room
-      player.pending_output.should == "There's no room with that id.\n"
+      player.should have_output "There's no room with that id.\n"
     end
   end
   context "room inspection commands" do
     it "should let a player see what rooms exist" do
-      message = "Rooms:\n#{Room.all.map{|r| "#{r.id}: #{r.name}"}.join("\n")}\n"
       player.process_input("rooms")
-      player.pending_output.should == message
+      player.should have_output "Rooms:\n#{Room.all.map{|r| "#{r.id}: #{r.name}"}.join("\n")}\n"
     end
     it "should let a builder see their current room number with 'bl'" do
       r_id = player.room.id

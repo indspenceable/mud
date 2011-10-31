@@ -9,7 +9,7 @@ class Room < ActiveRecord::Base
   #players should only count logged in players.
   alias :all_players :players
   def players
-    all_players.reject{|p| !p.logged_in?}
+    all_players.where(:logged_in => true)
   end
 
   def describe_to player
@@ -30,7 +30,7 @@ class Room < ActiveRecord::Base
   #ignore should be the player object, forward the opts[:output]
   def echo message, opts={}
     players.each do |p|
-      p.output message,(opts[:output]||{}) unless p == opts[:ignore]
+      p.output message,(opts[:output]||{}) unless p == opts[:ignore] || (opts[:ignore].include? p rescue nil)
     end
   end
 end

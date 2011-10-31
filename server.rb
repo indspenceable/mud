@@ -8,11 +8,10 @@ EM::run do
     Mobile.all.each do |m|
       m.take_action
     end
-    Player.where('pending_output IS NOT NULL').each do |p|
-      p.deliver_output if p.logged_in?
+    Player.where('logged_in = "t" AND pending_output IS NOT NULL').each do |p|
+      p.deliver_output
     end
     BalanceUse.where("ending_at < ?", Time.zone.now).each do |b|
-      puts "Find an expired balance"
       b.destroy
     end
   end

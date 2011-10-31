@@ -8,10 +8,13 @@ describe Player do
     con = mock('connection')
 
     player.log_in! con
-    con.should_receive(:send_data).with("Hello\n>x")
+    #We give it this regex because the prompt may change.
+    con.should_receive(:send_data).with(/\AHello.*/)
     player.output("Hello")
     player.deliver_output
   end
+
+  it "should test the prompt"
 
   it "should be able to log in and out" do
     con = mock('connection')
@@ -29,7 +32,7 @@ describe Player do
     player.output("a")
     player.output("b")
     player.output("c")
-    con.should_receive(:send_data).with("a\nb\nc\n>x")
+    con.should_receive(:send_data).with(/\Aa\nb\nc\n.*/)
     player.deliver_output
   end
 
@@ -38,7 +41,8 @@ describe Player do
     player.log_in! con
     player.output("a", :color => :test1)
     player.output("b", :color => :test2)
-    con.should_receive(:send_data).with("\e[31ma\e[0m\n\e[34mb\e[0m\n>x")
+    #TODO - UGH. Clean this shit up.s
+    con.should_receive(:send_data).with(/\A\e\[31ma\e\[0m\n\e\[34mb\e\[0m\n/)
     player.deliver_output
   end
 end
