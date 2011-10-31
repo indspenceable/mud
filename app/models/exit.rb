@@ -1,6 +1,22 @@
+# == Schema Information
+#
+# Table name: exits
+#
+#  id             :integer         not null, primary key
+#  direction      :string(255)
+#  origin_id      :integer
+#  destination_id :integer
+#  created_at     :datetime
+#  updated_at     :datetime
+#
+
 class Exit < ActiveRecord::Base
   belongs_to :origin, :class_name => "Room", :foreign_key => "origin_id"
   belongs_to :destination, :class_name => "Room", :foreign_key => "destination_id"
+  validate :direction, :presence => true
+  validate :origin, :presence => true
+  validate :destination, :presence => true
+
 
   @@reverse_exits = {
     'north' => 'south',
@@ -15,3 +31,4 @@ class Exit < ActiveRecord::Base
     self.class.reverse direction
   end
 end
+

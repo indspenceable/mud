@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: items
+#
+#  id         :integer         not null, primary key
+#  owner_id   :integer         not null
+#  owner_type :string(255)     not null
+#  type       :string(255)     not null
+#
+
 class Revolver < Item
   item_type :gun
   

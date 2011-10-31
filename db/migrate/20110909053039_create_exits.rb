@@ -1,9 +1,9 @@
 class CreateExits < ActiveRecord::Migration
   def self.up
     create_table :exits do |t|
-      t.string :direction 
-      t.references :origin 
-      t.references :destination
+      t.string :direction, :null => false
+      t.references :origin, :null => false
+      t.references :destination, :null => false
 
       t.timestamps
     end

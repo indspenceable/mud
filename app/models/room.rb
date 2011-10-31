@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: rooms
+#
+#  id   :integer         not null, primary key
+#  name :string(255)     not null
+#  desc :string(255)
+#
+
 class Room < ActiveRecord::Base
   has_many :players
   has_many :mobiles
@@ -34,3 +43,4 @@ class Room < ActiveRecord::Base
     end
   end
 end
+

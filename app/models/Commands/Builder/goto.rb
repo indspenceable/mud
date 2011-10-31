@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: commands
+#
+#  id         :integer         not null, primary key
+#  type       :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Commands::Builder::Goto < Command
   def perform player,arguments
     room = Room.find(arguments.to_i) rescue nil

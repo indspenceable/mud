@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: exits
+#
+#  id             :integer         not null, primary key
+#  direction      :string(255)
+#  origin_id      :integer
+#  destination_id :integer
+#  created_at     :datetime
+#  updated_at     :datetime
+#
+
 require 'test_helper'
 
 class ExitTest < ActiveSupport::TestCase
@@ -6,3 +18,4 @@ class ExitTest < ActiveSupport::TestCase
     assert true
   end
 end
+

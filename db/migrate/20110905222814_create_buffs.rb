@@ -1,7 +1,7 @@
 class CreateBuffs < ActiveRecord::Migration
   def self.up
     create_table :buffs do |t|
-      t.references :player
+      t.references :player, :null => false
       t.string :type, :null => false
 
       t.timestamps

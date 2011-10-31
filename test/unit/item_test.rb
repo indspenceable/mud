@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: items
+#
+#  id         :integer         not null, primary key
+#  owner_id   :integer         not null
+#  owner_type :string(255)     not null
+#  type       :string(255)     not null
+#
+
 require 'test_helper'
 
 class ItemTest < ActiveSupport::TestCase
@@ -6,3 +16,4 @@ class ItemTest < ActiveSupport::TestCase
     assert true
   end
 end
+

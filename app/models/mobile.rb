@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: mobiles
+#
+#  id         :integer         not null, primary key
+#  type       :string(255)     not null
+#  room_id    :integer         not null
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Mobile < ActiveRecord::Base
   belongs_to :room
   has_many :items, :as => :owner
@@ -14,3 +25,4 @@ class Mobile < ActiveRecord::Base
     raise "long_name undefined for #{self.class}"
   end
 end
+

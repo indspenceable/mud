@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: players
+#
+#  id             :integer         not null, primary key
+#  name           :string(255)     not null
+#  password_hash  :string(255)
+#  password_salt  :string(255)
+#  pending_output :string(255)
+#  logged_in      :boolean
+#  room_id        :integer         not null
+#  colors         :text            not null
+#  exp            :integer         default(0), not null
+#  hp             :integer
+#  mp             :integer
+#
+
 require 'dispatch'
 class Player < ActiveRecord::Base
   belongs_to :room
@@ -8,6 +25,7 @@ class Player < ActiveRecord::Base
   
   validate :colors, :presence => true
   validate :room, :presence => true
+  validate :name, :presence => true, :uniqueness => true
   
   scope :logged_in, where(:logged_in => true)
   
@@ -215,3 +233,4 @@ class Player < ActiveRecord::Base
   end
   include Health
 end
+

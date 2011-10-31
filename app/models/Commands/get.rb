@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: commands
+#
+#  id         :integer         not null, primary key
+#  type       :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Commands::Get < Command
   check_standard
   def self.names
@@ -17,3 +27,4 @@ class Commands::Get < Command
     player.output "There is nothing here by that name."
   end
 end
+

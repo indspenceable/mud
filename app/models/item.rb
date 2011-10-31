@@ -1,19 +1,23 @@
+# == Schema Information
+#
+# Table name: items
+#
+#  id         :integer         not null, primary key
+#  owner_id   :integer         not null
+#  owner_type :string(255)     not null
+#  type       :string(255)     not null
+#
+
 class Item < ActiveRecord::Base
   belongs_to :owner, :polymorphic => true
   validate :owner, :presence => true
   
   def self.item_type sym
-    define_method(:"#{sym}_type?") do
-      true
-    end
+    define_method(:"#{sym}_type?") {true}
   end
   
   def method_missing sym, *args
-    if sym =~ /.*_type?/
-      false
-    else
-      super
-    end
+    sym =~ /.*_type?/ ? false : super
   end
-
 end
+

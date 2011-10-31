@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: balance_uses
+#
+#  id           :integer         not null, primary key
+#  balance_type :string(255)     not null
+#  ending_at    :datetime        not null
+#  player_id    :integer         not null
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+
 class BalanceUse < ActiveRecord::Base
   belongs_to :player
   validate :ending_at, :presence => true
@@ -8,3 +20,4 @@ class BalanceUse < ActiveRecord::Base
     player.regain_balance(balance_type)
   end
 end
+
