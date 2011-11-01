@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Dispatch do
+describe "dispatch" do
   # Common code
   let(:player) do
     FactoryGirl.create(:player)
@@ -81,5 +81,7 @@ describe Dispatch do
   end
   
   it "Should let the player see who is online."
+
+  it "Should allow the player to view their inventory."
 
 end

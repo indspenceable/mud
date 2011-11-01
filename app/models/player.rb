@@ -15,7 +15,6 @@
 #  mp             :integer
 #
 
-require 'dispatch'
 class Player < ActiveRecord::Base
   belongs_to :room
   has_many :items, :as => :owner
@@ -23,9 +22,20 @@ class Player < ActiveRecord::Base
   serialize :colors, Hash
   has_many :balance_uses
   
+  belongs_to :left_hand, :class_name => "Item"
+  belongs_to :right_hand, :class_name => "Item"
+  
+  
   validate :colors, :presence => true
   validate :room, :presence => true
   validate :name, :presence => true, :uniqueness => true
+  validate :equipment_must_be_in_inventory
+  def equipment_must_be_in_inventory
+    #for all slots, they must either be empty, or be owned by this player.
+    [left_hand,right_hand].each do |current_slot|
+      !current_slot || current_slot.owner == self
+    end
+  end
   
   scope :logged_in, where(:logged_in => true)
   
@@ -140,7 +150,7 @@ class Player < ActiveRecord::Base
       opts = {:newline => true}.merge(opts)
       text = "#{colorize(opts[:color])}#{text}#{Player::Colors.color_code :reset}" if opts[:color]
       text = text + "\n" if opts[:newline]
-      update_attribute(:pending_output, (pending_output ? pending_output + text : text))
+      update_attributes!(:pending_output => (pending_output ? pending_output + text : text))
       #deliver_output if logged_in?
       nil
     end
@@ -152,7 +162,7 @@ class Player < ActiveRecord::Base
     #Only call if we are logged in
     def deliver_output
       connections[id].send_data pending_output + prompt
-      update_attribute :pending_output, nil
+      update_attributes! :pending_output => nil
     end
   end
   include InputOutput
@@ -167,13 +177,14 @@ class Player < ActiveRecord::Base
   
     def log_in! con
       connections[id] = con
-      update_attribute(:logged_in, true)
+      update_attributes!(:logged_in => true)
     end
     def log_out!
       room.echo("#{name} glows softly, and then vanishes.", self)
       output("Goodbye!")
+      deliver_output
       connections[id].close_connection_after_writing
-      update_attribute(:logged_in, false)
+      update_attributes!(:logged_in => false)
     end
     def remove_connection!
       connections.delete(id)
@@ -222,15 +233,55 @@ class Player < ActiveRecord::Base
       60*level
     end
     def take_damage! damage
-      update_attribute(:hp, hp - damage)
+      update_attributes!(:hp => hp - damage)
       die! if self.hp <= 0
     end
     def die!
       output "You have died."
       room.echo "#{name} has died. What a loser!", self
-      update_attribute(:hp, max_hp)
+      update_attributes!(:hp => max_hp)
     end
   end
   include Health
+  
+  module Gender
+    def he
+      'He'
+    end
+    def she
+      he
+    end
+    def his
+      'his'
+    end
+    def hers
+      his
+    end
+    def him
+      'him'
+    end
+    def her
+      him
+    end
+  end
+  include Gender
+  
+  module Descriptions
+    def short_name
+      name.capitalize
+    end
+    def long_name
+      rtn = "#{short_name} is here. "
+      puts "Left hand is #{left_hand} and right hand is #{right_hand}"
+      if left_hand || right_hand
+        rtn << "#{he} is holding "
+        rtn << "#{left_hand.short_name} in #{his} left hand#{', and ' if right_hand}" if left_hand
+        rtn << "#{right_hand.short_name} in #{his} right hand" if right_hand
+        rtn << "."
+      end
+      rtn
+    end
+  end
+  include Descriptions
 end
 

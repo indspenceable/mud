@@ -12,5 +12,6 @@ require 'spec_helper'
 
 describe Command do
   pending "add some examples to (or delete) #{__FILE__}"
+  it "Should have shared examples for commands."
 end
 

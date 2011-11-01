@@ -9,7 +9,7 @@
 #
 
 class Commands::Get < Command
-  check_standard
+  requires_standard_balances
   def self.names
     %w(g get)
   end
@@ -17,7 +17,7 @@ class Commands::Get < Command
     room = player.room
     room.items.each do |item|
       if item.called? arguments
-        room.echo "#{player.name} picks up #{item.short_name}", :ignore => player
+        room.echo "#{player.short_name} picks up #{item.short_name}", :ignore => player
         player.output "You pick up #{item.short_name}"
         item.owner = player
         item.save!

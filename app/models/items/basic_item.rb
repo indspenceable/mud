@@ -12,10 +12,10 @@ class Items::BasicItem < Item
   item_type :basic
   
   def short_name
-    'item'
+    'a basic item'
   end
   def long_name
-    'A basic item.'
+    'A basic item lies here.'
   end
   def called? name
     name == 'item'

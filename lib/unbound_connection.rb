@@ -13,7 +13,7 @@ class Unbound
       @connection.send_data("Welcome to the mud. There will probably be a welcome message here, in the future.\n")
       @player = Player.find_by_name(data)
       @player.log_in!(@connection)
-      @player.room.echo "#{@player.name} appears magically.", @player
+      @player.room.echo "#{@player.short_name} appears magically.", @player
       Log.debug "Logged in!"
       @player.id
     else

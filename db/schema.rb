@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111028054708) do
+ActiveRecord::Schema.define(:version => 20111031084102) do
 
   create_table "balance_uses", :force => true do |t|
     t.string   "balance_type", :null => false
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(:version => 20111028054708) do
   add_index "balance_uses", ["player_id", "balance_type"], :name => "index_on_player_id_balance_types", :unique => true
 
   create_table "buffs", :force => true do |t|
-    t.integer  "player_id"
+    t.integer  "player_id",  :null => false
     t.string   "type",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -62,9 +62,9 @@ ActiveRecord::Schema.define(:version => 20111028054708) do
   end
 
   create_table "exits", :force => true do |t|
-    t.string   "direction"
-    t.integer  "origin_id"
-    t.integer  "destination_id"
+    t.string   "direction",      :null => false
+    t.integer  "origin_id",      :null => false
+    t.integer  "destination_id", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -97,6 +97,8 @@ ActiveRecord::Schema.define(:version => 20111028054708) do
     t.integer "exp",            :default => 0, :null => false
     t.integer "hp"
     t.integer "mp"
+    t.integer "left_hand_id"
+    t.integer "right_hand_id"
   end
 
   add_index "players", ["name"], :name => "index_players_on_name"

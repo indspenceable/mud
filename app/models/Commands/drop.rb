@@ -9,15 +9,13 @@
 #
 
 class Commands::Drop < Command
-  check_standard
+  requires_standard_balances
   def perform player, arguments
-    room = player.room
     player.items.each do |item|
       if item.called? arguments
-        room.echo "#{player.name} drops #{item.short_name}", :ignore => player
+        player.room.echo "#{player.short_name} drops #{item.short_name}", :ignore => player
         player.output "You drop #{item.short_name}"
-        item.owner = room
-        item.save!
+        item.update_attributes!(:owner => player.room)
         return
       end
     end

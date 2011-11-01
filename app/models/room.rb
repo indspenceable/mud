@@ -25,7 +25,9 @@ class Room < ActiveRecord::Base
     players_here = players - [player]
     player.output name, :color => :title
     player.output desc, :color => :description
-    player.output players_here.map{|p| p.name}.to_sentence + ".", :color => :players unless players_here.empty?
+    # player.output players_here.map{|p| p.name}.to_sentence + ".", :color => :players unless players_here.empty?
+    player.output players_here.map{|p| p.long_name}.join(" "), :color => :players unless players_here.empty?
+    puts "output is #{ players_here.map{|p| p.long_name}.join(" ")}"
     player.output mobiles.map{|m| m.long_name}.join(" "), :color => :mobiles unless mobiles.empty?
     player.output items.map{|i| i.long_name }.join(" "), :color => :items unless items.empty?
     exits_string = case exits.size

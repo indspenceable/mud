@@ -1,7 +1,9 @@
 #! ruby
 
+puts "Loading environment"
 require File.expand_path('../config/environment',  __FILE__)
 
+puts "Starting EM"
 EM::run do
   EM::start_server '0.0.0.0', 8080, Mud::PlayerConnection
   EM::PeriodicTimer.new(0) do

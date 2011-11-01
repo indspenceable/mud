@@ -8,13 +8,13 @@
 #  type       :string(255)     not null
 #
 
-class Revolver < Item
+class Items::Revolver < Item
   item_type :gun
   
   has_many :bullets
 
   def short_name
-    'revolver'
+    'a shiny revolver'
   end
   def long_name
     'A shiny revolver sits here.'

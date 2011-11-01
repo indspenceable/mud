@@ -15,7 +15,7 @@ class Commands::Inventory < Command
   def perform player, arguments
     if player.items.size > 0
       player.output "You have:"
-      player.items.each do |i|
+      player.items.each do |item|
         player.output item.short_name
       end
     else
