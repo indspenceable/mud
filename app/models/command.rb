@@ -57,6 +57,7 @@ class Command < ActiveRecord::Base
                   raise "Command (#{self.name}) tried to parse type #{t} but there's not a valid parsing for that."
                 end
     end
+    list << args if args
     yield *list
   end
 end

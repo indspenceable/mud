@@ -25,7 +25,7 @@ class Item < ActiveRecord::Base
      
   def self.item_delegate
     delegate_type = name.match(/Items::(.*)/)[1].underscore
-    owns_one delegate_type, "Items::Delegates::#{delegate_type.camelcase}Detail"
+    owns_one delegate_type, "Items::Delegates::#{delegate_type.camelcase}Delegate"
   end
 end
 
