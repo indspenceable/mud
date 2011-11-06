@@ -51,6 +51,10 @@ class Command < ActiveRecord::Base
                   player.room.players.find_by_name(current).tap do |x|
                     player.output "There is no one here by that name." or return unless x
                   end
+                when :player
+                  Player.find_by_name(current).tap do |x|
+                    player.output "There is no player by that name." or return unless x
+                  end
                 when :item_inventory
                   player.items.detect{ |x| x.called? current } or return
                 else
