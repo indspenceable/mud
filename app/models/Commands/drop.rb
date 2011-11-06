@@ -18,6 +18,7 @@ class Commands::Drop < Command
         item.update_attributes!(:owner => player.room)
         return
       end
+      player.output "You don't have anything with that name."
     end
   end
 end

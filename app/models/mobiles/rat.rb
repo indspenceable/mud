@@ -10,7 +10,8 @@
 #
 
 class Mobiles::Rat < Mobile
-  owns_one "RatDetail"
+  #this is wrong.
+  owns_one 'Rat', "RatDelegate"
   
   def take_action
   end

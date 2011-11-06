@@ -9,7 +9,7 @@
 #  updated_at :datetime
 #
 
-class RatDetail < ActiveRecord::Base
+class RatDelegate < ActiveRecord::Base
   belongs_to :rat
 end
 

@@ -38,6 +38,7 @@ describe Player do
     player.log_in! con
     player.logged_in?.should be true
     con.should_receive(:close_connection_after_writing)
+    con.should_receive(:send_data).with(/Goodbye!/)
     player.log_out!
     player.logged_in?.should be false
   end

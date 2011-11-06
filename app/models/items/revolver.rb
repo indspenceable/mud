@@ -9,10 +9,26 @@
 #
 
 class Items::Revolver < Item
+  has_many :bullets, :class_name => "Items::Bullet", :as => :owner
   item_type :gun
+  item_delegate
   
-  has_many :bullets
-
+  def loaded?
+    0.upto(5) do |i|
+      return true if self.send(:"bullet_#{i}")
+    end
+    false
+  end
+  
+  def next_chamber
+    0.upto(5) do |i|
+      self.send(:"bullet_#{i}").tap do |b|
+        return b if b
+      end
+    end
+    raise "Gun isn't loaded."
+  end
+  
   def short_name
     'a shiny revolver'
   end
@@ -22,5 +38,4 @@ class Items::Revolver < Item
   def called? name
     ['gun','revolver'].include? name
   end
-
 end

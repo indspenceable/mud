@@ -12,12 +12,25 @@ class Commands::Gunslinger::Fire < Command
   requires_standard_balances  
   def perform player, args
     parse(player, args, [:player_here], "Usage: FIRE <player>") do |target|
+      #error checking
       return player.output("You can't shoot yourself.") if player==target
-      player.room.echo("#{player.short_name} fires #{player.his} gun at #{target.name}", :ignore => [player,target])
-      player.output("You fire your gun at #{target.name}")
-      target.output("#{player.short_name} fires #{player.his} gun at you.")
-      target.take_damage! 3
-      player.use_balance! :balance, 2
+      #are they wielding a gun?
+      return player.output("You need wield a gun in order to fire it.") unless player.right_hand && player.right_hand.gun_type?
+      
+      gun = player.right_hand
+      
+      if gun.loaded?
+        player.room.echo("#{player.short_name} fires #{gun.short_name} at #{target.name}", :ignore => [player,target])
+        player.output("You fire #{gun.short_name} at #{target.name}")
+        target.output("#{player.short_name} fires #{gun.short_name} at you.")
+        bullet = gun.next_chamber.hit(target)
+        player.use_balance! :balance, 2
+      else
+        player.room.echo("#{player.short_name} fires #{gun.short_name}, but it is out of bullets.", :ignore => player)
+        player.output("You fires #{gun.short_name}, but it is out of bullets.")
+        player.use_balance(:balance, 1)
+      end
+      
     end
   end
 end

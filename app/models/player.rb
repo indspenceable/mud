@@ -29,11 +29,13 @@ class Player < ActiveRecord::Base
   validate :colors, :presence => true
   validate :room, :presence => true
   validate :name, :presence => true, :uniqueness => true
-  validate :equipment_must_be_in_inventory
-  def equipment_must_be_in_inventory
+  before_validation :remove_unowned_items_from_slots
+  
+  def remove_unowned_items_from_slots
     #for all slots, they must either be empty, or be owned by this player.
-    [left_hand,right_hand].each do |current_slot|
-      !current_slot || current_slot.owner == self
+    [:left_hand,:right_hand].each do |current_slot|
+      item = send(current_slot)
+      self.update_attribute(current_slot, nil) if item && (item.owner != self)
     end
   end
   
@@ -63,7 +65,6 @@ class Player < ActiveRecord::Base
       end
     end
   end
-
 
   #COLORS
   module Colors
@@ -151,7 +152,6 @@ class Player < ActiveRecord::Base
       text = "#{colorize(opts[:color])}#{text}#{Player::Colors.color_code :reset}" if opts[:color]
       text = text + "\n" if opts[:newline]
       update_attributes!(:pending_output => (pending_output ? pending_output + text : text))
-      #deliver_output if logged_in?
       nil
     end
     

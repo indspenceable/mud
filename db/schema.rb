@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111031084102) do
+ActiveRecord::Schema.define(:version => 20111104181524) do
 
   create_table "balance_uses", :force => true do |t|
     t.string   "balance_type", :null => false
@@ -103,14 +103,28 @@ ActiveRecord::Schema.define(:version => 20111031084102) do
 
   add_index "players", ["name"], :name => "index_players_on_name"
 
-  create_table "rat_details", :force => true do |t|
+  create_table "rat_delegates", :force => true do |t|
     t.integer  "rat_id"
     t.integer  "toughness",  :default => 15, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "rat_details", ["rat_id"], :name => "index_rat_details_on_rat_id", :unique => true
+  add_index "rat_delegates", ["rat_id"], :name => "index_rat_delegates_on_rat_id", :unique => true
+
+  create_table "revolver_delegates", :force => true do |t|
+    t.integer  "bullet_0_id"
+    t.integer  "bullet_1_id"
+    t.integer  "bullet_2_id"
+    t.integer  "bullet_3_id"
+    t.integer  "bullet_4_id"
+    t.integer  "bullet_5_id"
+    t.integer  "revolver_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "revolver_delegates", ["revolver_id"], :name => "index_on_revolver_id", :unique => true
 
   create_table "rooms", :force => true do |t|
     t.string "name", :null => false

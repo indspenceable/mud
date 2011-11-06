@@ -20,7 +20,5 @@ class Items::BasicItem < Item
   def called? name
     name == 'item'
   end
-  
-  
 end
 
