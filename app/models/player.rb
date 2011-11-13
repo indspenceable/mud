@@ -13,6 +13,8 @@
 #  exp            :integer         default(0), not null
 #  hp             :integer
 #  mp             :integer
+#  left_hand_id   :integer
+#  right_hand_id  :integer
 #
 
 class Player < ActiveRecord::Base
@@ -284,4 +286,5 @@ class Player < ActiveRecord::Base
   end
   include Descriptions
 end
+
 

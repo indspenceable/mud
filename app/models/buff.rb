@@ -13,6 +13,9 @@ class Buff < ActiveRecord::Base
   belongs_to :player
   validate :player, :presence => true
   
-  has_many :data_fields
+  def self.buff_delegate
+    delegate_type = name.match(/Buffs::(.*)/)[1].underscore
+    owns_one delegate_type, "Buffs::Delegates::#{delegate_type.camelcase}Delegate"
+  end
 end
 

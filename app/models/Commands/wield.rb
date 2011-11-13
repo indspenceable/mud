@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: commands
+#
+#  id         :integer         not null, primary key
+#  type       :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Commands::Wield < Command
   requires_standard_balances
   def perform player, args
@@ -14,3 +24,4 @@ class Commands::Wield < Command
     end
   end
 end
+

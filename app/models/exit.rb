@@ -3,9 +3,9 @@
 # Table name: exits
 #
 #  id             :integer         not null, primary key
-#  direction      :string(255)
-#  origin_id      :integer
-#  destination_id :integer
+#  direction      :string(255)     not null
+#  origin_id      :integer         not null
+#  destination_id :integer         not null
 #  created_at     :datetime
 #  updated_at     :datetime
 #
@@ -31,4 +31,5 @@ class Exit < ActiveRecord::Base
     self.class.reverse direction
   end
 end
+
 

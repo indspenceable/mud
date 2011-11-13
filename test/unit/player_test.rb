@@ -13,6 +13,8 @@
 #  exp            :integer         default(0), not null
 #  hp             :integer
 #  mp             :integer
+#  left_hand_id   :integer
+#  right_hand_id  :integer
 #
 
 require 'test_helper'
@@ -23,4 +25,5 @@ class PlayerTest < ActiveSupport::TestCase
     assert true
   end
 end
+
 

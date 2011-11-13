@@ -5,9 +5,9 @@ FactoryGirl.define do
     room
   end
 
-  factory :room do
+  factory :room do |r|
     name "example room"
-    desc "This is an example room"
+    r.desc "This is an example room"
   end
   
   factory :exit do

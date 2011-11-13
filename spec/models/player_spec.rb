@@ -13,6 +13,8 @@
 #  exp            :integer         default(0), not null
 #  hp             :integer
 #  mp             :integer
+#  left_hand_id   :integer
+#  right_hand_id  :integer
 #
 
 require 'spec_helper'
@@ -64,4 +66,5 @@ describe Player do
     player.deliver_output
   end
 end
+
 

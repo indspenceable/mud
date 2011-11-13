@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: rat_details
+# Table name: rat_delegates
 #
 #  id         :integer         not null, primary key
 #  rat_id     :integer
@@ -12,4 +12,5 @@
 class RatDelegate < ActiveRecord::Base
   belongs_to :rat
 end
+
 
