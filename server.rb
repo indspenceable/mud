@@ -5,25 +5,18 @@ require File.expand_path('../config/environment',  __FILE__)
 
 # If we're starting the server, no players should be logged in.
 puts "Initializing all players to be logged out."
-Player.where(:logged_in => true).each do |p|
-  puts "Updating a player."
-  p.update_attributes!(:logged_in => false)
-end
+Player::Connections.initialize_all_players_as_logged_out!
 puts Player.where(:logged_in => true).count
 
 puts "Starting EM"
 EM::run do
   EM::start_server '0.0.0.0', 8080, Mud::PlayerConnection
   EM::PeriodicTimer.new(0) do
-    Mobile.all.each do |m|
-      m.take_action
-    end
-    Player.where('logged_in = "t" AND pending_output IS NOT NULL').each do |p|
-      p.deliver_output
-    end
-    BalanceUse.where("ending_at < ?", Time.zone.now).each do |b|
-      b.destroy
-    end
+    Mobile.all.each(&:take_action)
+    Buff.all.each(&:tick)
+    Player.deliver_output_to_all_logged_in_players
+    BalanceUse.destroy_expired
+    Buff.destroy_expired
   end
   
   puts "started server on 0.0.0.0:8080"

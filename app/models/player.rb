@@ -17,7 +17,7 @@
 #  right_hand_id  :integer
 #
 
-class Player < ActiveRecord::Base
+class Player < ActiveRecord::Base 
   belongs_to :room
   has_many :items, :as => :owner
   has_many :buffs
@@ -42,10 +42,14 @@ class Player < ActiveRecord::Base
   end
   
   scope :logged_in, where(:logged_in => true)
+  scope :with_output, where('pending_output IS NOT NULL')
+  def self.deliver_output_to_all_logged_in_players
+    logged_in.with_output.each(&:deliver_output)
+  end
   
   has_and_belongs_to_many :command_groups
   def command_names
-    CommandName.where(:command_group_id => command_groups)
+    CommandGroup.find_by_name('default').command_names + CommandName.where(:command_group => command_groups.without_prefix)
   end
   before_create do
     self.hp = max_hp
@@ -63,7 +67,7 @@ class Player < ActiveRecord::Base
       new_name = :"direct_#{sym}"
       alias_method new_name, sym
       define_method sym, ->(*value) do 
-        self.send new_name, *buffs.reduce(value) { |memo, obj| obj.klass.respond_to?(sym)?  obj.klass.send(sym,*memo) : memo }
+        self.send new_name, *buffs.reduce(value) { |memo, obj| obj.respond_to?(sym)?  obj.send(sym,*memo) : memo }
       end
     end
   end
@@ -127,8 +131,6 @@ class Player < ActiveRecord::Base
       # if there's an exit with this name...
       return if parse_direction command_name, arguments
 
-      #command_name, arguments = "exit", input if room.exits.find_by_direction(command_name)
-      #command_name, arguments = "exit", parse_direction(command_name) if 
 
       #Global namespace'd command
       command = command_names.find_by_name(command_name).command rescue nil
@@ -173,6 +175,11 @@ class Player < ActiveRecord::Base
 
   #login/logout
   module Connections
+    def self.initialize_all_players_as_logged_out!
+      Player.where(:logged_in => true).each do |p|
+        p.update_attributes!(:logged_in => false)
+      end
+    end
     def connections
       @@connections ||= {}
     end
@@ -285,6 +292,20 @@ class Player < ActiveRecord::Base
     end
   end
   include Descriptions
+  
+  module Buffs
+    def afflict klass, *args
+      buffs.where(:type => klass).tap do |b|
+        if b.exists?
+          b.first.merge!(*args)
+        else
+          klass.create(*args)
+        end
+      end
+    end
+  end
+  include Buffs
+  
 end
 
 

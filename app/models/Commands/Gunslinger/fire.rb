@@ -23,7 +23,9 @@ class Commands::Gunslinger::Fire < Command
         player.room.echo("#{player.short_name} fires #{gun.short_name} at #{target.name}", :ignore => [player,target])
         player.output("You fire #{gun.short_name} at #{target.name}")
         target.output("#{player.short_name} fires #{gun.short_name} at you.")
-        bullet = gun.next_chamber.hit(target)
+        #bullet = #gun.next_chamber.hit(target)
+        target.take_damage!(3)
+        target.afflict(::Buffs::Poison)
         player.use_balance! :balance, 2
       else
         player.room.echo("#{player.short_name} fires #{gun.short_name}, but it is out of bullets.", :ignore => player)

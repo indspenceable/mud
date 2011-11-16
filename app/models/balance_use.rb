@@ -19,5 +19,10 @@ class BalanceUse < ActiveRecord::Base
   before_destroy do
     player.regain_balance(balance_type)
   end
+  
+  scope :expired, ->{where "ending_at < ?", Time.zone.now}
+  def self.destroy_expired
+    expired.each(&:destroy)
+  end
 end
 
