@@ -54,7 +54,7 @@ class Player < ActiveRecord::Base
   before_create do
     self.hp = max_hp
     self.mp = max_mp
-    self.colors ||= Player::Colors.default_colors
+    self.colors ||= Player.default_colors
   end
   after_create do
     command_groups << CommandGroup.find_by_name('default')
@@ -73,245 +73,224 @@ class Player < ActiveRecord::Base
   end
 
   #COLORS
-  module Colors
-    def colorize category
-      Player::Colors.color_code colors[category]
-    end
-    def self.default_colors
-      {
-        :title => :red,
-        :players => :blue,
-        :exits => :yellow,
-        :say => :cyan,
-        :end => :reset
-      }
-    end
-    @@color_codes ={
-      :red => "\e[31m",
-      :blue => "\e[34m",
-      :cyan => "\e[36m",
-      :yellow => "\e[33m",
-      :reset =>"\e[0m"
+  def colorize category
+    Player.color_code colors[category]
+  end
+  def self.default_colors
+    {
+      :title => :red,
+      :players => :blue,
+      :exits => :yellow,
+      :say => :cyan,
+      :end => :reset
     }
-    def self.color_code color
-      @@color_codes[color]
+  end
+  @@color_codes ={
+    :red => "\e[31m",
+    :blue => "\e[34m",
+    :cyan => "\e[36m",
+    :yellow => "\e[33m",
+    :reset =>"\e[0m"
+  }
+  def self.color_code color
+    @@color_codes[color]
+  end
+
+  #EXITS
+  def self.valid_standard_exit? dir
+    exit_names[dir] or (dir if exit_names.values.include? dir)
+  end
+  def self.exit_names
+    @@exit_names ||= {'n'=>'north','s'=>'south','e'=>'east','w'=>'west','nw'=>'northwest','sw'=>'southwest','se'=>'southeast','ne'=>'northeast'}
+  end
+  def parse_direction cmd, args
+    # If command is a standard exit name set exit_dir to that
+    exit_dir = Player.exit_names.values.include?(cmd)? cmd : Player.exit_names[cmd]
+    # find the exit for that direction, if it exists
+    exit_obj = room.exits.find_by_direction (exit_dir || cmd)
+    # if it is either a standard exit name, OR we found an exit for a special name
+    if exit_dir || exit_obj
+      res = command_names.find_by_name('exit').command.perform_with_balance_check self, (exit_dir || cmd) rescue nil
+      #output "There's no exit in that direction" unless res
+      true
     end
   end
-  include Colors
 
-  #TODO does this live here?
-  module Exits
-    def self.valid_standard_exit? dir
-      exit_names[dir] or (dir if exit_names.values.include? dir)
-    end
-    def self.exit_names
-      @@exit_names ||= {'n'=>'north','s'=>'south','e'=>'east','w'=>'west','nw'=>'northwest','sw'=>'southwest','se'=>'southeast','ne'=>'northeast'}
-    end
-    def parse_direction cmd, args
-      # If command is a standard exit name set exit_dir to that
-      exit_dir = Player::Exits.exit_names.values.include?(cmd)? cmd : Player::Exits.exit_names[cmd]
-      # find the exit for that direction, if it exists
-      exit_obj = room.exits.find_by_direction (exit_dir || cmd)
-      # if it is either a standard exit name, OR we found an exit for a special name
-      if exit_dir || exit_obj
-        res = command_names.find_by_name('exit').command.perform_with_balance_check self, (exit_dir || cmd) rescue nil
-        #output "There's no exit in that direction" unless res
-        true
-      end
-    end
+  #input/output
+  def process_input input
+    input = "say #{input[1,input.length]}" if input[0]=='"' || input[0]=="'"
+  
+    command_name,arguments = input.split(' ', 2)
+    # if there's an exit with this name...
+    return if parse_direction command_name, arguments
+
+    #Global namespace'd command
+    command = command_names.find_by_name(command_name).command rescue nil
+    return command.perform_with_balance_check self, arguments if command
+    #nested namespace command
+    
+    group_name, command_name, arguments = command_name, *(arguments || '').split(' ',2)
+    command = command_groups.find_by_prefix(group_name).command_names.find_by_name(command_name).command rescue nil
+    return command.perform self, arguments if command
+
+    output "I don't quite know what you mean by that."
+  rescue Object => e
+    raise e unless Rails.env.production?
+    
+    puts "Triggered Exception"
+    puts e
+    puts "***********"
+    puts e.backtrace
+    output("You've triggered an uncaught exception. That's too bad. Please don't do that again, for the immediate time being? Thanks!")
   end
-  include Exits
+  
 
-  module InputOutput
-    #input/output
-    def process_input input
-      input = "say #{input[1,input.length]}" if input[0]=='"' || input[0]=="'"
-    
-      command_name,arguments = input.split(' ', 2)
-      # if there's an exit with this name...
-      return if parse_direction command_name, arguments
 
-      #Global namespace'd command
-      command = command_names.find_by_name(command_name).command rescue nil
-      return command.perform_with_balance_check self, arguments if command
-      #nested namespace command
-      
-      group_name, command_name, arguments = command_name, *(arguments || '').split(' ',2)
-      command = command_groups.find_by_prefix(group_name).command_names.find_by_name(command_name).command rescue nil
-      return command.perform self, arguments if command
- 
-      output "I don't quite know what you mean by that."
-    rescue Object => e
-      raise e unless Rails.env.production?
-      
-      puts "Triggered Exception"
-      puts e
-      puts "***********"
-      puts e.backtrace
-      output("You've triggered an uncaught exception. That's too bad. Please don't do that again, for the immediate time being? Thanks!")
-    end
-
-    def output text, opts = {}
-      opts = {:newline => true}.merge(opts)
-      text = "#{colorize(opts[:color])}#{text}#{Player::Colors.color_code :reset}" if opts[:color]
-      text = text + "\n" if opts[:newline]
-      update_attributes!(:pending_output => (pending_output ? pending_output + text : text))
-      nil
-    end
-    
-    
-    def prompt
-      "[#{hp}/#{max_hp}   #{has_balance?(:balance) ? 'x' : '-'}]"
-    end
-    #Only call if we are logged in
-    def deliver_output
-      connections[id].send_data pending_output + prompt
-      update_attributes! :pending_output => nil
-    end
+  def output text, opts = {}
+    opts = {:newline => true}.merge(opts)
+    text = "#{colorize(opts[:color])}#{text}#{Player.color_code :reset}" if opts[:color]
+    text = text + "\n" if opts[:newline]
+    update_attributes!(:pending_output => (pending_output ? pending_output + text : text))
+    nil
   end
-  include InputOutput
-  chain :output, :process_input
+  
+  def prompt
+    "[#{hp}/#{max_hp}   #{has_balance?(:balance) ? 'x' : '-'}]"
+  end
+  #Only call if we are logged in
+  def deliver_output
+    connections[id].send_data pending_output + prompt
+    update_attributes! :pending_output => nil
+  end
+
 
 
   #login/logout
-  module Connections
-    def self.initialize_all_players_as_logged_out!
-      Player.where(:logged_in => true).each do |p|
-        p.update_attributes!(:logged_in => false)
-      end
-    end
-    def connections
-      @@connections ||= {}
-    end
-  
-    def log_in! con
-      connections[id] = con
-      update_attributes!(:logged_in => true)
-    end
-    def log_out!
-      room.echo("#{name} glows softly, and then vanishes.", self)
-      output("Goodbye!")
-      deliver_output
-      connections[id].close_connection_after_writing
-      update_attributes!(:logged_in => false)
-    end
-    def remove_connection!
-      connections.delete(id)
+  def self.initialize_all_players_as_logged_out!
+    Player.where(:logged_in => true).each do |p|
+      p.update_attributes!(:logged_in => false)
     end
   end
-  include Connections
+  def connections
+    @@connections ||= {}
+  end
+
+  def log_in! con
+    connections[id] = con
+    update_attributes!(:logged_in => true)
+  end
+  def log_out!
+    room.echo("#{name} glows softly, and then vanishes.", self)
+    output("Goodbye!")
+    deliver_output
+    connections[id].close_connection_after_writing
+    update_attributes!(:logged_in => false)
+  end
+  def remove_connection!
+    connections.delete(id)
+  end
+
 
   # Balance stuff
-  module Balance
-    def off_balance? balance_type
-      balance_uses.find_by_balance_type(balance_type)
-    end
-    def has_balance? balance_type
-      !off_balance?(balance_type)
-    end
+  def off_balance? balance_type
+    balance_uses.find_by_balance_type(balance_type)
+  end
+  def has_balance? balance_type
+    !off_balance?(balance_type)
+  end
 
-    def use_balance! balance_type, time_in_seconds
-      BalanceUse.find_or_create_by_player_id_and_balance_type(:player_id => self.id, :balance_type => balance_type, :ending_at => Time.now) do |bu|
-        bu.ending_at += time_in_seconds.seconds
+  def use_balance! balance_type, time_in_seconds
+    BalanceUse.find_or_create_by_player_id_and_balance_type(:player_id => self.id, :balance_type => balance_type, :ending_at => Time.now) do |bu|
+      bu.ending_at += time_in_seconds.seconds
+    end
+  end
+  BALANCE_MESSAGES = {
+    balance:'You have regained balance.',
+    equilibrium:'You have regained equilibrium'
+  }
+  def regain_balance balance_type
+    output(BALANCE_MESSAGES[balance_type] || "You have regained #{balance_type}")
+  end
+  
+  
+  
+  
+
+  #THE MAGIC FORMULA
+  def level
+    (Math.sqrt(exp)/3).floor() + 1
+  end
+  def max_mp
+    60*level
+  end
+ 
+  def max_hp
+    60*level
+  end
+  def take_damage! damage
+    update_attributes!(:hp => hp - damage)
+    die! if self.hp <= 0
+  end
+  def die!
+    output "You have died."
+    room.echo "#{name} has died. What a loser!", self
+    update_attributes!(:hp => max_hp)
+  end
+
+
+  # Gender based stuff
+  def he
+    'He'
+  end
+  def she
+    he
+  end
+  def his
+    'his'
+  end
+  def hers
+    his
+  end
+  def him
+    'him'
+  end
+  def her
+    him
+  end
+  
+
+  def short_name
+    name.capitalize
+  end
+  def long_name
+    rtn = "#{short_name} is here. "
+    puts "Left hand is #{left_hand} and right hand is #{right_hand}"
+    if left_hand || right_hand
+      rtn << "#{he} is holding "
+      rtn << "#{left_hand.short_name} in #{his} left hand#{', and ' if right_hand}" if left_hand
+      rtn << "#{right_hand.short_name} in #{his} right hand" if right_hand
+      rtn << "."
+    end
+    rtn
+  end
+  
+  # Buffs
+
+  def afflict klass, *args
+    buffs.where(:type => klass).tap do |b|
+      if b.exists?
+        b.first.merge!(*args)
+      else
+        klass.create(*args)
       end
     end
-    BALANCE_MESSAGES = {
-      balance:'You have regained balance.',
-      equilibrium:'You have regained equilibrium'
-    }
-    def regain_balance balance_type
-      output(BALANCE_MESSAGES[balance_type] || "You have regained #{balance_type}")
-    end
   end
-  include Balance
-  
-  #Sub modules for HP/MP
-  module Experience
-    #THE MAGIC FORMULA
-    def level
-      (Math.sqrt(exp)/3).floor() + 1
-    end
-    def max_mp
-      60*level
-    end
+  def buffed? klass
+    puts "Hi"
+    r = buffs.where(:type => klass).exists?
+    puts 'there'
+    r
   end
-  include Experience
-  
-  module Health
-    def max_hp
-      60*level
-    end
-    def take_damage! damage
-      update_attributes!(:hp => hp - damage)
-      die! if self.hp <= 0
-    end
-    def die!
-      output "You have died."
-      room.echo "#{name} has died. What a loser!", self
-      update_attributes!(:hp => max_hp)
-    end
-  end
-  include Health
-  
-  module Gender
-    def he
-      'He'
-    end
-    def she
-      he
-    end
-    def his
-      'his'
-    end
-    def hers
-      his
-    end
-    def him
-      'him'
-    end
-    def her
-      him
-    end
-  end
-  include Gender
-  
-  module Descriptions
-    def short_name
-      name.capitalize
-    end
-    def long_name
-      rtn = "#{short_name} is here. "
-      puts "Left hand is #{left_hand} and right hand is #{right_hand}"
-      if left_hand || right_hand
-        rtn << "#{he} is holding "
-        rtn << "#{left_hand.short_name} in #{his} left hand#{', and ' if right_hand}" if left_hand
-        rtn << "#{right_hand.short_name} in #{his} right hand" if right_hand
-        rtn << "."
-      end
-      rtn
-    end
-  end
-  include Descriptions
-  
-  module Buffs
-    def afflict klass, *args
-      buffs.where(:type => klass).tap do |b|
-        if b.exists?
-          b.first.merge!(*args)
-        else
-          klass.create(*args)
-        end
-      end
-    end
-    def buffed? klass
-      puts "Hi"
-      r = buffs.where(:type => klass).exists?
-      puts 'there'
-      r
-    end
-  end
-  include Buffs
-  
 end
 
 
