@@ -18,8 +18,8 @@ class Commands::Buffs < Command
           end
         end
       end
+    else
+      player.output "No buffs."
     end
-  else
-    player.output "No buffs."
   end
 end

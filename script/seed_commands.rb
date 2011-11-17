@@ -15,6 +15,7 @@ Dir.glob("./app/models/commands/*").each do |path|
     name_space = path.match(/\/([^\/]*)\z/)[1]
     
     current_group = CommandGroup.find_or_create_by_name(name_space.underscore)
+    current_group.update_attributes!(:prefix => name_space.underscore)
     
     Dir.glob("./app/models/commands/#{$1}/*").each do |sub_path|
       if sub_path =~ /.*\/(.*)\.rb/

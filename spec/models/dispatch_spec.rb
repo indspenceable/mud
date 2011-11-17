@@ -25,7 +25,6 @@ describe "dispatch" do
     player.items.should == []
 
     player.process_input("get item")
-
     [room,item,player].each {|el| el.reload}
     player.items.should == [item]
     room.items.should == []

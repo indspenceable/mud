@@ -49,7 +49,7 @@ class Player < ActiveRecord::Base
   
   has_and_belongs_to_many :command_groups
   def command_names
-    CommandGroup.find_by_name('default').command_names + CommandName.where(:command_group => command_groups.without_prefix)
+    CommandName.where(:command_group_id => command_groups.without_prefix)
   end
   before_create do
     self.hp = max_hp
@@ -131,13 +131,13 @@ class Player < ActiveRecord::Base
       # if there's an exit with this name...
       return if parse_direction command_name, arguments
 
-
       #Global namespace'd command
       command = command_names.find_by_name(command_name).command rescue nil
       return command.perform_with_balance_check self, arguments if command
       #nested namespace command
-      group_name, command_name, arguments = command_name, 'goto', 1
-      command = command_groups.find_by_prefix(group_name).commands.find_by_name(command_name) rescue nil
+      
+      group_name, command_name, arguments = command_name, *(arguments || '').split(' ',2)
+      command = command_groups.find_by_prefix(group_name).command_names.find_by_name(command_name).command rescue nil
       return command.perform self, arguments if command
  
       output "I don't quite know what you mean by that."
@@ -302,6 +302,12 @@ class Player < ActiveRecord::Base
           klass.create(*args)
         end
       end
+    end
+    def buffed? klass
+      puts "Hi"
+      r = buffs.where(:type => klass).exists?
+      puts 'there'
+      r
     end
   end
   include Buffs

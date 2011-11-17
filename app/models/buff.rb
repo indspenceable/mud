@@ -18,6 +18,7 @@ class Buff < ActiveRecord::Base
   
   before_create do
     self.debuff = self.debuff?
+    true
   end
   def debuff?
     false
@@ -32,4 +33,3 @@ class Buff < ActiveRecord::Base
     owns_one delegate_type, "Buffs::Delegates::#{delegate_type.camelcase}Delegate"
   end
 end
-
