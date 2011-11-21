@@ -23,10 +23,11 @@ ActiveRecord::Schema.define(:version => 20111104181524) do
   add_index "balance_uses", ["player_id", "balance_type"], :name => "index_on_player_id_balance_types", :unique => true
 
   create_table "buffs", :force => true do |t|
-    t.integer  "player_id",                     :null => false
-    t.boolean  "debuff",                        :null => false
-    t.boolean  "expired",    :default => false, :null => false
-    t.string   "type",                          :null => false
+    t.integer  "player_id",                      :null => false
+    t.boolean  "debuff",                         :null => false
+    t.boolean  "expired",     :default => false, :null => false
+    t.boolean  "needs_pulse", :default => false, :null => false
+    t.string   "type",                           :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

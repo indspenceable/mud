@@ -286,10 +286,7 @@ class Player < ActiveRecord::Base
     end
   end
   def buffed? klass
-    puts "Hi"
-    r = buffs.where(:type => klass).exists?
-    puts 'there'
-    r
+    buffs.where(:type => klass).first rescue nil
   end
 end
 

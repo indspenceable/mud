@@ -4,6 +4,7 @@ class CreateBuffs < ActiveRecord::Migration
       t.references :player, :null => false
       t.boolean :debuff, :null => false
       t.boolean :expired, :null => false, :default => false
+      t.boolean :needs_pulse, :null => false, :default => false
       t.string :type, :null => false
 
       t.timestamps
